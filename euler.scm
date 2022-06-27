@@ -1,0 +1,52 @@
+(module euler
+  (;; lists
+   range
+   run-length
+   product
+   combinations
+   powerset
+   permutations
+   ;; digits
+   number->list
+   list->number
+   digitsum
+   palindrome?
+   ;; arrays
+   array?
+   array-dimensions
+   array-indexes
+   list->array
+   array->list
+   array-copy
+   array-ref
+   array-set!
+   array-exists?
+   ;; queues
+   priority-queue?
+   priority-queue-empty
+   priority-queue-empty?
+   priority-queue-merge
+   priority-queue-insert
+   priority-queue-first
+   priority-queue-rest
+   ;; maths
+   factorial
+   primes
+   expt-mod
+   discrete-log
+   prime?
+   factorize
+   divisors)
+
+  (import
+    (scheme)
+    (chicken base)
+    (srfi 1)
+    (srfi 69)
+    (srfi 133))
+
+  (include "src/lists.scm")
+  (include "src/digits.scm")
+  (include "src/arrays.scm")
+  (include "src/queues.scm")
+  (include "src/maths.scm"))
