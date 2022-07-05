@@ -64,7 +64,6 @@
 
     (test-group "array"
       (let* ((lst '((1 2 3) (4 5 6))) (array (list->array lst)))
-        (test #f                                     (array?           lst))
         (test #t                                     (array?           array))
         (test lst                                    (array->list      array))
         (test array                                  (array-copy       array))
