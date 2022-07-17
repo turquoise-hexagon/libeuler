@@ -22,13 +22,13 @@
    array-set!
    array-exists?
    ;; queues
-   priority-queue?
    priority-queue-empty
    priority-queue-empty?
-   priority-queue-merge
    priority-queue-insert
    priority-queue-first
    priority-queue-rest
+   priority-queue->list
+   list->priority-queue
    ;; maths
    factorial
    primes
