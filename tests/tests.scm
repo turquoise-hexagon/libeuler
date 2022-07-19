@@ -29,15 +29,20 @@
       (test '((1 4) (1 5) (1 6) (2 4) (2 5) (2 6) (3 4) (3 5) (3 6))           (product '(1 2 3) '(4 5 6)))
       (test '((1 3 5) (1 3 6) (1 4 5) (1 4 6) (2 3 5) (2 3 6) (2 4 5) (2 4 6)) (product '(1 2) '(3 4) '(5 6))))
 
-    (test-group "combinations"
-      (test '((1) (2) (3))                                           (combinations '(1 2 3) 1))
-      (test '((1 1) (2 1) (1 2) (2 2))                               (combinations '(1 2) 2))
-      (test '((1 1) (2 1) (3 1) (1 2) (2 2) (3 2) (1 3) (2 3) (3 3)) (combinations '(1 2 3) 2)))
+    (test-group "power"
+      (test '((1) (2) (3))                                           (power '(1 2 3) 1))
+      (test '((1 1) (2 1) (1 2) (2 2))                               (power '(1 2) 2))
+      (test '((1 1) (2 1) (3 1) (1 2) (2 2) (3 2) (1 3) (2 3) (3 3)) (power '(1 2 3) 2)))
 
     (test-group "powerset"
-      (test '((1) (2) (3) (4))                     (powerset '(1 2 3 4) 1))
-      (test '((1 2) (1 3) (1 4) (2 3) (2 4) (3 4)) (powerset '(1 2 3 4) 2))
-      (test '((1 2 3) (1 2 4) (1 3 4) (2 3 4))     (powerset '(1 2 3 4) 3)))
+      (test '((1) ())                                   (powerset '(1)))
+      (test '((1 2) (1) (2) ())                         (powerset '(1 2)))
+      (test '((1 2 3) (1 2) (1 3) (1) (2 3) (2) (3) ()) (powerset '(1 2 3))))
+
+    (test-group "combinations"
+      (test '((1) (2) (3) (4))                     (combinations '(1 2 3 4) 1))
+      (test '((1 2) (1 3) (1 4) (2 3) (2 4) (3 4)) (combinations '(1 2 3 4) 2))
+      (test '((1 2 3) (1 2 4) (1 3 4) (2 3 4))     (combinations '(1 2 3 4) 3)))
 
     (test-group "permutations"
       (test '((1))                                             (permutations '(1)))

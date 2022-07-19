@@ -26,16 +26,27 @@
           lst)))
     '(()) lst))
 
-(define (combinations lst n)
+(define (power lst n)
   (if (= n 0)
     '(())
     (join
       (map
         (lambda (i)
           (map (lambda (_) (cons _ i)) lst))
-        (combinations lst (- n 1))))))
+        (power lst (- n 1))))))
 
-(define (powerset lst n)
+(define (powerset lst)
+  (if (null? lst)
+    '(())
+    (let ((tmp (powerset (cdr lst))))
+      (join (list
+              (map
+                (lambda (i)
+                  (cons (car lst) i))
+                tmp)
+              tmp)))))
+
+(define (combinations lst n)
   (cond
     ((= n 0)
      '(()))
@@ -46,8 +57,8 @@
         (list (map
                 (lambda (i)
                   (cons (car lst) i))
-                (powerset (cdr lst) (- n 1)))
-              (powerset (cdr lst) n))))))
+                (combinations (cdr lst) (- n 1)))
+              (combinations (cdr lst) n))))))
     
 (define (permutations lst)
   (cond

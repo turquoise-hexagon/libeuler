@@ -3,8 +3,9 @@
    range
    run-length
    product
-   combinations
+   power
    powerset
+   combinations
    permutations
    ;; digits
    number->list
