@@ -2,6 +2,7 @@
   (;; lists
    range
    run-length
+   extremum
    product
    power
    powerset

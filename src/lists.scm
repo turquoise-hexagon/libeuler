@@ -16,6 +16,15 @@
         (let-values (((a b) (span (lambda (_) (comp _ head)) lst)))
           (cons (list (length a) head) (loop b)))))))
 
+(define (extremum lst #!optional (procedure identity) (comparator <))
+  (let loop ((lst (cdr lst)) (current (procedure (car lst))) (acc (car lst)))
+    (if (null? lst)
+      acc
+      (let* ((item (car lst)) (next (procedure item)))
+        (if (comparator next current)
+          (loop (cdr lst) next item)
+          (loop (cdr lst) current acc))))))
+
 (define (product . lst)
   (foldr
     (lambda (lst acc)
@@ -59,7 +68,7 @@
                   (cons (car lst) i))
                 (combinations (cdr lst) (- n 1)))
               (combinations (cdr lst) n))))))
-    
+
 (define (permutations lst)
   (cond
     ((null? lst)

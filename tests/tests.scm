@@ -24,6 +24,10 @@
       (test '((1 1) (1 2) (2 1)) (run-length '(1 2 1 1)))
       (test '((3 1) (2 2) (1 1)) (run-length '(1 1 1 2 2 1))))
 
+    (test-group "extremum"
+      (test 1       (extremum '(1 2 3 4 5)))
+      (test "aaaaa" (extremum '("a" "aa" "aaa" "aaaa" "aaaaa") string-length >)))
+
     (test-group "product"
       (test '((1 2))                                                           (product '(1) '(2)))
       (test '((1 4) (1 5) (1 6) (2 4) (2 5) (2 6) (3 4) (3 5) (3 6))           (product '(1 2 3) '(4 5 6)))

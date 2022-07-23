@@ -2,7 +2,7 @@
   (let loop ((n n) (acc '()))
     (if (= n 0)
       acc
-      (let ((q (quotient n base)) (m (modulo n base))) 
+      (let ((q (quotient n base)) (m (modulo n base)))
         (loop q (cons m acc))))))
 
 (define (list->number lst #!optional (base 10))
