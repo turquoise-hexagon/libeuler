@@ -7,13 +7,13 @@
         acc
         (loop (- i step) (cons i acc))))))
 
-(define (run-length lst)
+(define (run-length lst #!optional (comp =))
   (let loop ((lst lst))
     (if (null? lst)
       '()
       (let ((head (car lst))
             (tail (cdr lst)))
-        (let-values (((a b) (span (lambda (_) (= _ head)) lst)))
+        (let-values (((a b) (span (lambda (_) (comp _ head)) lst)))
           (cons (list (length a) head) (loop b)))))))
 
 (define (product . lst)
