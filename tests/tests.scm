@@ -89,20 +89,6 @@
         (test #f (array-exists? array '(5 5)))))
 
     (test-group "priority-queue"
-      (define (list->priority-queue comp? lst)
-        (let loop ((lst lst) (acc priority-queue-empty))
-          (if (null? lst)
-            acc
-            (loop (cdr lst)
-              (priority-queue-insert comp? (car lst) acc)))))
-
-      (define (priority-queue->list comp? queue)
-        (let loop ((queue queue) (acc '()))
-          (if (priority-queue-empty? queue)
-            (reverse acc)
-            (loop (priority-queue-rest comp? queue)
-              (cons (priority-queue-first queue) acc)))))
-
       (let ((lst '(14 15 12 9 17 5 8 4 7 14 13 12 11 15 17 5 3 16 12 19)))
         (test (sort lst <) (priority-queue->list < (list->priority-queue < lst)))))
 
