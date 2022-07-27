@@ -71,7 +71,7 @@
       (for-each
         (lambda (i)
           (cond
-            ((= n i)
+            ((> (* i i) n)
              (_ #t))
             ((= (modulo n i) 0)
              (_ #f))))
@@ -81,30 +81,28 @@
 (define (_spsp? n a)
   (do ((d (- n 1) (/ d 2))
        (s 0 (+ s 1)))
-    ((odd? d)
-     (let ((t (expt-mod a d n)))
-       (if (= t 1)
-         #t
-         (do ((s s (- s 1))
-              (t t (expt-mod t 2 n)))
-           ((or (= s 0)
-                (= t (- n 1)))
-            (> s 0))))))))
+      ((odd? d)
+       (let ((t (expt-mod a d n)))
+         (if (or (= t 1)
+                 (= t (- n 1)))
+           #t
+           (do ((s s (- s 1))
+                (t t (expt-mod t 2 n)))
+             ((or (= s 0)
+                  (= t (- n 1)))
+              (> s 0))))))))
 
 (define (prime? n)
   (cond
-    ((< n 2) #f)
+    ((< n 2)
+     #f)
     ((< n 1000000)
      (_prime? n))
     (else
-      (call/cc
-        (lambda (_)
-          (for-each
-            (lambda (a)
-              (unless (_spsp? n a)
-                (_ #f)))
-            '(2 325 9375 28178 450775 9780504 1795265022))
-          (_ #t))))))
+      (every
+        (lambda (a)
+          (_spsp? n a))
+        '(2 325 9375 28178 450775 9780504 1795265022)))))
 
 (define (_rho-factor n c)
   (let ((f (lambda (x) (modulo (+ (* x x) c) n))))
