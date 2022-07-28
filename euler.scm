@@ -43,6 +43,7 @@
   (import
     (scheme)
     (chicken base)
+    (chicken sort)
     (srfi 1)
     (srfi 69)
     (srfi 133))
