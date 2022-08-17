@@ -146,15 +146,17 @@
                           d)))))))))))))
 
 (define (factorize n)
-  (let-values (((n acc) (_wheel-factors n 1000)))
-    (let ((acc (let loop ((i n) (acc acc))
-                 (if (= i 1)
-                   acc
-                   (if (prime? i)
-                     (cons i acc)
-                     (let ((_ (_brent i 1)))
-                       (loop (/ i _) (cons _ acc))))))))
-      (sort acc <))))
+  (if (< n 2)
+    '()
+    (let-values (((n acc) (_wheel-factors n 1000)))
+      (let ((acc (let loop ((i n) (acc acc))
+                   (if (= i 1)
+                     acc
+                     (if (prime? i)
+                       (cons i acc)
+                       (let ((_ (_brent i 1)))
+                         (loop (/ i _) (cons _ acc))))))))
+        (sort acc <)))))
 
 (define (divisors n)
   (let-values (((occurences factors) (unzip2 (run-length (factorize n)))))
