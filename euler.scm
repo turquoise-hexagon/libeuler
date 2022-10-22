@@ -33,6 +33,7 @@
    list->priority-queue
    ;; maths
    factorial
+   fibonacci
    primes
    expt-mod
    discrete-log

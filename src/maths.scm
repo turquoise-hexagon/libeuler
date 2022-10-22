@@ -18,6 +18,23 @@
            (loop (+ i i) (- acc i)))
         acc))))
 
+(define (fibonacci n)
+  (define (_fibonacci a b)
+    (let loop ((a a) (b b) (c 3) (n (quotient n 2)))
+      (if (> n 1)
+        (let ((tc (- (* c c) 2)) (tn (quotient n 2)))
+          (if (even? n)
+            (loop a (+ a (* b c)) tc tn)
+            (loop (+ b (* a c)) b tc tn)))
+        (+ b (* a c)))))
+  (cond
+    ((= n 0) 0)
+    ((< n 3) 1)
+    (else
+      (if (even? n)
+        (_fibonacci 0  1)
+        (_fibonacci 1 -1)))))
+
 (define (primes n)
   (if (< n 2) '()
     (let* ((lim (quotient (- n 1) 2)) (sieve (make-vector lim #t)))

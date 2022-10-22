@@ -95,6 +95,9 @@
     (test-group "factorial"
       (test '(1 1 2 6 24 120 720 5040 40320 362880) (map factorial (range 0 9))))
 
+    (test-group "fibonacci"
+      (test '(0 1 1 2 3 5 8 13 21 34) (map fibonacci (range 0 9))))
+
     (test-group "primes"
       (test '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47) (primes 50)))
 
