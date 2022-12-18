@@ -16,7 +16,9 @@
   (apply product
     (map
       (lambda (i)
-        (range 0 (- i 1)))
+        (let ((_ (range 0 (- i 1))))
+          (if (null? _) (list 0)
+            _)))
       lst)))
 
 (define (_array-copy array)
