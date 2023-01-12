@@ -1,4 +1,8 @@
-(define _primes
+;; ---
+;; constants
+;; ---
+
+(define _stored-primes
   '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97
     101 103 107 109 113 127 131 137 139 149 151 157 163 167 173 179 181 191
     193 197 199 211 223 227 229 233 239 241 251 257 263 269 271 277 281 283
@@ -9,7 +13,11 @@
     757 761 769 773 787 797 809 811 821 823 827 829 839 853 857 859 863 877
     881 883 887 907 911 919 929 937 941 947 953 967 971 977 983 991 997))
 
-(define (factorial n)
+;; ---
+;; functions
+;; ---
+
+(define-inline (_factorial n)
   (if (= n 0)
     1
     (let loop ((i 1) (acc n))
@@ -18,8 +26,8 @@
            (loop (+ i i) (- acc i)))
         acc))))
 
-(define (fibonacci n)
-  (define (_fibonacci a b)
+(define-inline (_fibonacci n)
+  (define (helper a b)
     (let loop ((a a) (b b) (c 3) (n (quotient n 2)))
       (if (> n 1)
         (let ((tc (- (* c c) 2)) (tn (quotient n 2)))
@@ -32,10 +40,19 @@
     ((< n 3) 1)
     (else
       (if (even? n)
-        (_fibonacci 0  1)
-        (_fibonacci 1 -1)))))
+        (helper 0  1)
+        (helper 1 -1)))))
 
-(define (primes n)
+(define-inline (_expt-mod b e m)
+  (let loop ((b b) (e e) (acc 1))
+    (if (= e 0)
+      acc
+      (loop (modulo (* b b) m) (quotient e 2)
+        (if (odd? e)
+          (modulo (* b acc) m)
+          acc)))))
+
+(define-inline (_primes n)
   (if (< n 2) '()
     (let* ((lim (quotient (- n 1) 2)) (sieve (make-vector lim #t)))
       (let loop ((i 0) (t 3) (l '(2)))
@@ -54,16 +71,7 @@
           (else
            (loop (+ i 1) (+ t 2) l)))))))
 
-(define (expt-mod base expo mod)
-  (let loop ((base base) (expo expo) (acc 1))
-    (if (= expo 0)
-      acc
-      (loop (modulo (* base base) mod) (quotient expo 2)
-        (if (odd? expo)
-          (modulo (* base acc) mod)
-          acc)))))
-
-(define (discrete-log g h p)
+(define-inline (_discrete-log g h p)
   (let ((n (inexact->exact (ceiling (sqrt (- p 1))))))
     (let ((mem (make-hash-table)))
       (for-each
@@ -82,20 +90,18 @@
               (range 0 (- n 1)))
             (_ -1)))))))
 
-(define (_prime? n)
-  (call/cc
-    (lambda (_)
-      (for-each
-        (lambda (i)
-          (cond
-            ((> (* i i) n)
-             (_ #t))
-            ((= (modulo n i) 0)
-             (_ #f))))
-        _primes)
-      (_ #t))))
+(define-inline (_trial-division-prime? n)
+  (let loop ((l _stored-primes))
+    (if (null? l)
+      #t
+      (let ((_ (car l)))
+        (if (= n _)
+          #t
+          (if (= (modulo n _) 0)
+            #f
+            (loop (cdr l))))))))
 
-(define (_spsp? n a)
+(define-inline (_witness? n a)
   (do ((d (- n 1) (/ d 2))
        (s 0 (+ s 1)))
       ((odd? d)
@@ -109,75 +115,104 @@
                   (= t (- n 1)))
               (> s 0))))))))
 
-(define (prime? n)
-  (cond
-    ((< n 2)
-     #f)
-    ((< n 1000000)
-     (_prime? n))
-    (else
+(define-inline (_prime? n)
+  (if (< n 2)
+    #f
+    (if (< n #e1e6)
+      (_trial-division-prime? n)
       (every
         (lambda (a)
-          (_spsp? n a))
+          (_witness? n a))
         '(2 325 9375 28178 450775 9780504 1795265022)))))
 
-(define (_wheel-factors n limit)
-  (let loop ((n n) (i 2) (acc '()) (lst (cons* 1 2 2 (circular-list 4 2 4 2 4 6 2 6))))
-    (if (< limit i)
-      (values n (reverse acc))
-      (if (or (= n 1)
-              (< n (* i i)))
-        (values 1 (reverse (cons n acc)))
-        (if (= (modulo n i) 0)
-          (loop (/ n i) i (cons i acc) lst)
-          (loop n (+ i (car lst)) acc (cdr lst)))))))
+(define-inline (_factor n)
+  (let main ((n n) (c 1))
+    (let ((f (lambda (x) (modulo (+ (* x x) c) n))))
+      (let loop ((t 2) (h 2) (d 1))
+        (cond
+          ((= d 1)
+           (let* ((t (f t))
+                  (h (f h))
+                  (h (f h))
+                  (d (gcd (- t h) n)))
+             (loop t h d)))
+          ((= d n) (main n (+ c 1)))
+          ((prime? d) d)
+          (else    (main d (+ c 1))))))))
 
-(define (_brent n c)
-  (define (f i)
-    (modulo (+ (* i i) c) n))
+(define-inline (_factorize n)
+  (let loop ((n n) (acc '()))
+    (if (< n 2)
+      acc
+      (if (even? n)
+        (loop (/ n 2) (cons 2 acc))
+        (let loop ((n n) (acc acc))
+          (if (prime? n)
+            (cons n acc)
+            (let ((_ (_factor n)))
+              (loop (/ n _) (cons _ acc)))))))))
 
-  (define (g i j k)
-    (modulo (* i (abs (- j k))) n))
-
-  (let loop ((x 2) (y (+ c 4)) (z (+ c 4)) (i 1) (j 2) (k 1))
-    (if (= x y)
-      (_brent n (+ c 1))
-      (if (= i j)
-        (let ((_ (f y)))
-          (loop y _ z (+ i 1) (+ j j) (g k y _)))
-        (if (> (modulo i 100) 0)
-          (loop x (f y) z (+ i 1) j (g k x y))
-          (let ((d (gcd k n)))
-            (if (= d 1)
-              (loop x (f y) y (+ i 1) j (g k x y))
-              (if (< 1 d n)
-                d
-                (let subloop ((i 1) (z (f z)))
-                  (if (= i 100)
-                    (_brent n (+ c 1))
-                    (let ((d (gcd (- z x) n)))
-                      (if (= d 1)
-                        (subloop (+ i 1) (f z))
-                        (if (= d n)
-                          (_brent n (+ c 1))
-                          d)))))))))))))
-
-(define (factorize n)
-  (if (< n 2)
-    '()
-    (let-values (((n acc) (_wheel-factors n 1000)))
-      (let ((acc (let loop ((i n) (acc acc))
-                   (if (= i 1)
-                     acc
-                     (if (prime? i)
-                       (cons i acc)
-                       (let ((_ (_brent i 1)))
-                         (loop (/ i _) (cons _ acc))))))))
-        (sort acc <)))))
-
-(define (divisors n)
+(define-inline (_divisors n)
   (let-values (((occurences factors) (unzip2 (run-length (factorize n)))))
     (map
       (lambda (multis)
         (apply * (map expt factors multis)))
       (apply product (map (lambda (_) (range 0 _)) occurences)))))
+
+;; ---
+;; wrappers
+;; ---
+
+(define (factorial n)
+  (##sys#check-integer n 'factorial)
+  (when (< n 0)
+    (##sys#error-bad-exact-uinteger n 'factorial))
+  (_factorial n))
+
+(define (fibonacci n)
+  (##sys#check-integer n 'fibonacci)
+  (when (< n 0)
+    (##sys#error-bad-exact-uinteger n 'fibonacci))
+  (_fibonacci n))
+
+(define (expt-mod b e m)
+  (##sys#check-integer b 'expt-mod)
+  (##sys#check-integer e 'expt-mod)
+  (##sys#check-integer m 'expt-mod)
+  (when (< b 0) (##sys#error-bad-exact-uinteger b 'expt-mod))
+  (when (< e 0) (##sys#error-bad-exact-uinteger e 'expt-mod))
+  (when (< m 0) (##sys#error-bad-exact-uinteger m 'expt-mod))
+  (_expt-mod b e m))
+
+(define (primes n)
+  (##sys#check-integer n 'primes)
+  (when (< n 0)
+    (##sys#error-bad-exact-uinteger n 'primes))
+  (_primes n))
+
+(define (discrete-log g h p)
+  (##sys#check-integer g 'discrete-log)
+  (##sys#check-integer h 'discrete-log)
+  (##sys#check-integer p 'discrete-log)
+  (when (< g 0) (##sys#error-bad-exact-uinteger g 'discrete-log))
+  (when (< h 0) (##sys#error-bad-exact-uinteger h 'discrete-log))
+  (when (< p 0) (##sys#error-bad-exact-uinteger p 'discrete-log))
+  (_discrete-log g h p))
+
+(define (prime? n)
+  (##sys#check-integer n 'prime?)
+  (when (< n 0)
+    (##sys#error-bad-exact-uinteger n 'prime?))
+  (_prime? n))
+
+(define (factorize n)
+  (##sys#check-integer n 'factorize)
+  (when (< n 0)
+    (##sys#error-bad-exact-uinteger n 'factorize))
+  (_factorize n))
+
+(define (divisors n)
+  (##sys#check-integer n 'divisors)
+  (when (< n 0)
+    (##sys#error-bad-exact-uinteger n 'divisors))
+  (_divisors n))

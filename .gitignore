@@ -1,7 +1,5 @@
-euler.build.sh
-euler.import.scm
-euler.import.so
-euler.install.sh
-euler.link
-euler.so
-euler.static.o
+*.link
+*.o
+*.sh
+*.so
+*import*

@@ -1,50 +1,61 @@
 libeuler
 ========
-    small library of functions and structures useful for solving project euler problems
+    small library of functions and data structures, mostly intended for project euler
 
-    lists
+    digits
+        * digitsum
+        * list->number
+        * number->list
+        * palindrome?
+    list
+        * delete-at
+        * insert-at
         * range
         * run-length
+        * extremum
         * product
-        * combinations
+        * power
         * powerset
+        * combinations
         * permutations
-    digits
-        * number->list
-        * list->number
-        * digitsum
-        * palindrome?
-    arrays
+    array
         * array?
-        * array-dimensions
         * array-indexes
+        * array-dimensions
         * list->array
         * array->list
         * array-copy
         * array-ref
         * array-set!
         * array-exists?
-    queues
-        * priority-queue-empty
-        * priority-queue-empty?
-        * priority-queue-insert
-        * priority-queue-first
-        * priority-queue-rest
-        * priority-queue->list
-        * list->priority-queue
     maths
         * factorial
         * fibonacci
-        * primes
         * expt-mod
+        * primes
         * discrete-log
         * prime?
         * factorize
         * divisors
+    queue
+        * priority-queue?
+        * priority-queue
+        * priority-queue-empty?
+        * priority-queue-insert
+        * priority-queue-first
+        * priority-queue-rest
+        * list->priority-queue
+        * priority-queue->list
+        * priority-queue-map->list
+        * priority-queue-for-each
+        * priority-queue-fold
+        * priority-queue-filter->list
+        * priority-queue-take
+        * priority-queue-drop
 
 usage
 -----
-    * chicken-install
+    * chicken-install -test
 
 depends on
 ----------

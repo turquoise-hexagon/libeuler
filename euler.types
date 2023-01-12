@@ -1,0 +1,291 @@
+;; ---
+;; digits
+;; ---
+
+(euler#digitsum
+  (#(procedure #:enforce)
+   euler#digitsum
+   (integer #!optional integer)
+   integer))
+
+(euler#list->number
+  (#(procedure #:enforce)
+   euler#list->number
+   ((list-of integer) #!optional integer)
+   integer))
+
+(euler#number->list
+  (#(procedure #:enforce)
+   euler#number->list
+   (integer #!optional integer)
+   (list-of integer)))
+
+(euler#palindrome?
+  (#(procedure #:enforce)
+   euler#palindrome?
+   (integer #!optional integer)
+   boolean))
+
+;; ---
+;; list
+;; ---
+
+(euler#delete-at
+  (#(procedure #:enforce)
+   euler#delete-at
+   (pair integer)
+   list))
+
+(euler#insert-at
+  (#(procedure #:enforce)
+   euler#insert-at
+   (list integer *)
+   pair))
+
+(euler#range
+  (#(procedure #:enforce)
+   euler#range
+   (integer integer #!optional integer)
+   (list-of integer)))
+
+(euler#run-length
+  (#(procedure #:enforce)
+   euler#run-length
+   (list #!optional procedure)
+   (list-of (pair integer *))))
+
+(euler#extremum
+  (#(procedure #:enforce)
+   euler#extremum
+   (pair #!optional procedure procedure)
+   *))
+
+(euler#product
+  (#(procedure #:enforce)
+   euler#product
+   (#!rest list)
+   list))
+
+(euler#power
+  (#(procedure #:enforce)
+   euler#power
+   (list integer)
+   list))
+
+(euler#powerset
+  (#(procedure #:enforce)
+   euler#powerset
+   (list)
+   list))
+
+(euler#combinations
+  (#(procedure #:enforce)
+   euler#combinations
+   (list integer)
+   list))
+
+(euler#permutations
+  (#(procedure #:enforce)
+   euler#permutations
+   (list)
+   list))
+
+;; ---
+;; array
+;; ---
+
+(euler#array?
+  (#(procedure #:enforce)
+   euler#array?
+   ((struct euler#array))
+   boolean))
+
+(euler#array-indexes
+  (#(procedure #:enforce)
+   euler#array-indexes
+   ((struct euler#array))
+   (list-of (list-of integer))))
+
+(euler#array-dimensions
+  (#(procedure #:enforce)
+   euler#array-dimensions
+   ((struct euler#array))
+   (list-of integer)))
+
+(euler#list->array
+  (#(procedure #:enforce)
+   euler#list->array
+   (list)
+   (struct euler#array)))
+
+(euler#array->list
+  (#(procedure #:enforce)
+   euler#array->list
+   ((struct euler#array))
+   list))
+
+(euler#array-copy
+  (#(procedure #:enforce)
+   euler#array-copy
+   ((struct euler#array))
+   (struct euler#array)))
+
+(euler#array-ref
+  (#(procedure #:enforce)
+   euler#array-ref
+   ((struct euler#array) (list-of integer))
+   *))
+
+(euler#array-set!
+  (#(procedure #:enforce)
+   euler#array-set!
+   ((struct euler#array) (list-of integer) *)
+   undefined))
+
+(euler#array-exists?
+  (#(procedure #:enforce)
+   euler#array-exists?
+   ((struct euler#array) (list-of integer))
+   boolean))
+
+;; ---
+;; maths
+;; ---
+
+(euler#factorial
+  (#(procedure #:enforce)
+   euler#factorial
+   (integer)
+   integer))
+
+(euler#fibonacci
+  (#(procedure #:enforce)
+   euler#fibonacci
+   (integer)
+   integer))
+
+(euler#expt-mod
+  (#(procedure #:enforce)
+   euler#expt-mod
+   (integer integer integer)
+   integer))
+
+(euler#primes
+  (#(procedure #:enforce)
+   euler#primes
+   (integer)
+   (list-of integer)))
+
+(euler#discrete-log
+  (#(procedure #:enforce)
+   euler#discrete-log
+   (integer integer integer)
+   integer))
+
+(euler#prime?
+  (#(procedure #:enforce)
+   euler#prime?
+   (integer)
+   boolean))
+
+(euler#factorize
+  (#(procedure #:enforce)
+   euler#factorize
+   (integer)
+   (list-of integer)))
+
+(euler#divisors
+  (#(procedure #:enforce)
+   euler#divisors
+   (integer)
+   (list-of integer)))
+
+;; ---
+;; queue
+;; ---
+
+(euler#priority-queue?
+  (#(procedure #:enforce)
+   euler#priority-queue?
+   ((struct euler#priority-queue))
+   boolean))
+
+(euler#priority-queue
+  (#(procedure #:enforce)
+   euler#priority-queue
+   (procedure)
+   (struct euler#priority-queue)))
+
+(euler#priority-queue-empty?
+  (#(procedure #:enforce)
+   euler#priority-queue-empty?
+   ((struct euler#priority-queue))
+   boolean))
+
+(euler#priority-queue-insert
+  (#(procedure #:enforce)
+   euler#priority-queue-insert
+   ((struct euler#priority-queue) *)
+   (struct euler#priority-queue)))
+
+(euler#priority-queue-first
+  (#(procedure #:enforce)
+   euler#priority-queue-first
+   ((struct euler#priority-queue))
+   *))
+
+(euler#priority-queue-rest
+  (#(procedure #:enforce)
+   euler#priority-queue-rest
+   ((struct euler#priority-queue))
+   (struct euler#priority-queue)))
+
+(euler#list->priority-queue
+  (#(procedure #:enforce)
+   euler#list->priority-queue
+   (list procedure)
+   (struct euler#priority-queue)))
+
+(euler#priority-queue->list
+  (#(procedure #:enforce)
+   euler#priority-queue->list
+   ((struct euler#priority-queue))
+   (struct euler#priority-queue)))
+
+(euler#priority-queue-map->list
+  (#(procedure #:enforce)
+   euler#priority-queue-map->list
+   ((struct euler#priority-queue) procedure)
+   list))
+
+(euler#priority-queue-for-each
+  (#(procedure #:enforce)
+   euler#priority-queue-for-each
+   ((struct euler#priority-queue) procedure)
+   undefined))
+
+(euler#priority-queue-fold
+  (#(procedure #:enforce)
+   euler#priority-queue-fold
+   ((struct euler#priority-queue) procedure *)
+   *))
+
+(euler#priority-queue-filter->list
+  (#(procedure #:enforce)
+   euler#priority-queue-filter->list
+   ((struct euler#priority-queue) procedure)
+   list))
+
+(euler#priority-queue-take
+  (#(procedure #:enforce)
+   euler#priority-queue-take
+   ((struct euler#priority-queue) integer)
+   (struct euler#priority-queue)))
+
+(euler#priority-queue-drop
+  (#(procedure #:enforce)
+   euler#priority-queue-drop
+   ((struct euler#priority-queue) integer)
+   (struct euler#priority-queue)))
+
+; vim: ft=scheme

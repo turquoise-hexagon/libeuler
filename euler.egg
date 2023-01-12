@@ -1,9 +1,13 @@
-((author   "camille, camille at lzr dot pw")
- (synopsis "euler project helper functions")
- (license  "0BSD")
+((author "camille, camille at lzr dot pw")
+ (synopsis "project euler helper functions")
+ (license "0BSD")
  (category "math")
  (dependencies
    srfi-1
    srfi-69
    srfi-133)
- (components (extension euler)))
+ (components
+   (extension euler
+     (types-file (predefined)))))
+
+ ; vim: ft=scheme
