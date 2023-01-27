@@ -49,17 +49,13 @@
           (loop (cdr l) t acc))))))
 
 (define-inline (_product l)
-  (foldr
-    (lambda (l acc)
-      (join
-        (map
-          (lambda (i)
-            (map
-              (lambda (_)
-                (cons i _))
-              acc))
-          l)))
-    '(()) l))
+  (define (f i j)
+    (define (g k l)
+      (define (h m n)
+        (cons (cons k m) n))
+      (foldr h l j))
+    (foldr g '() i))
+  (foldr f '(()) l))
 
 (define-inline (_power l n)
   (let loop ((l l) (n n))
@@ -88,20 +84,20 @@
             i))))))
 
 (define-inline (_combinations l n)
-  (let loop ((l l) (n n))
-    (cond
-      ((= n 0)
-       '(()))
-      ((null? l)
-       '())
-      (else
-       (join
-         (list
-           (map
-             (lambda (i)
-               (cons (car l) i))
-             (loop (cdr l) (- n 1)))
-           (loop (cdr l) n)))))))
+  (cond
+    ((= n 0) '(()))
+    ((> n (length l)) '())
+    (else
+     (let loop ((l l) (t (list-tail l n)))
+      (cond
+        ((null? t) (list l))
+        ((eq? (cdr l) t) (map list l))
+        (else
+         (foldr
+           (lambda (a b)
+             (cons (cons (car l) a) b))
+           (loop (cdr l) (cdr t))
+           (loop (cdr l) t))))))))
 
 (define-inline (_permutations l)
   (let loop ((l l))
