@@ -59,13 +59,7 @@
     (chicken base)
     (chicken sort)
 
-    (only
-      (matchable)
-      match)
-
     (only (srfi 1)
-      circular-list
-      cons*
       every
       fold
       unzip2)
