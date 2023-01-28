@@ -97,25 +97,13 @@
            (loop (cdr l) t))))))))
 
 (define-inline (_permutations l)
-  (let main ((l l))
-    (match l
-      (()
-       `(()))
-      ((a)
-       `(,l))
-      ((a b)
-       `(,l (,b ,a)))
-      ((a b c)
-       `(,l (,a ,c ,b) (,b ,a ,c) (,b ,c ,a) (,c ,a ,b) (,c ,b ,a)))
-      (else
-        (let subloop ((a l) (b '()) (acc '()))
-          (if (null? a)
-            (reverse acc)
-            (subloop (cdr a) (cons (car a) b)
-              (foldl
-                (lambda (acc s)
-                  (cons (cons (car a) s) acc))
-                acc (main (append (reverse b) (cdr a)))))))))))
+  (let f ((j '()) (k (reverse l)) (l '()))
+    (if (null? k)
+      (cons (reverse j) l)
+      (let g ((a '()) (b k) (c l))
+        (if (pair? b)
+          (g (cons (car b) a) (cdr b) (f (cons (car b) j) (append (reverse a) (cdr b)) c))
+          c)))))
 
 ;; ---
 ;; wrappers
