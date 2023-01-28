@@ -60,6 +60,7 @@ usage
 depends on
 ----------
     * chicken
+    * matchable
     * srfi-1
     * srfi-69
     * srfi-133

@@ -4,6 +4,7 @@
  (category "math")
  (version  "0.0.1")
  (dependencies
+   matchable
    srfi-1
    srfi-69
    srfi-133)

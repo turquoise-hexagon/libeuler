@@ -70,7 +70,7 @@
     (test-group "permutations"
       (test '((1))                                             (permutations '(1)))
       (test '((1 2) (2 1))                                     (permutations '(1 2)))
-      (test '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 2 1) (3 1 2)) (permutations '(1 2 3)))))
+      (test '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1)) (permutations '(1 2 3)))))
 
  (test-group "array"
    (let ((test-lst '((1 2 3) (4 5 6))))
