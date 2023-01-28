@@ -58,17 +58,10 @@
   (foldr f '(()) l))
 
 (define-inline (_power l n)
-  (let loop ((l l) (n n))
-    (if (= n 0)
-      '(())
-      (join
-        (map
-          (lambda (i)
-            (map
-              (lambda (_)
-                (cons _ i))
-              l))
-          (loop l (- n 1)))))))
+  (let loop ((i 0) (acc '()))
+    (if (= i n)
+      (_product acc)
+      (loop (+ i 1) (cons l acc)))))
 
 (define-inline (_powerset l)
   (let loop ((l l))
@@ -85,13 +78,17 @@
 
 (define-inline (_combinations l n)
   (cond
-    ((= n 0) '(()))
-    ((> n (length l)) '())
+    ((= n 0)
+     '(()))
+    ((> n (length l))
+     '())
     (else
      (let loop ((l l) (t (list-tail l n)))
       (cond
-        ((null? t) (list l))
-        ((eq? (cdr l) t) (map list l))
+        ((null? t)
+         (list l))
+        ((eq? (cdr l) t)
+         (map list l))
         (else
          (foldr
            (lambda (a b)
