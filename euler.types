@@ -173,8 +173,8 @@
 (euler#primes
   (#(procedure #:enforce)
    euler#primes
-   (integer)
-   (list-of integer)))
+   (fixnum)
+   (list-of fixnum)))
 
 (euler#discrete-log
   (#(procedure #:enforce)

@@ -57,6 +57,7 @@
   (import
     (scheme)
     (chicken base)
+    (chicken fixnum)
     (chicken sort)
 
     (only (srfi 1)
