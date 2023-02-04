@@ -54,7 +54,7 @@
 
 (define-inline (_primes n)
   (if (fx< n 2) '()
-    (let* ((lim (quotient (fx- n 1) 2)) (sieve (make-vector lim #t)))
+    (let* ((lim (fx/ (fx- n 1) 2)) (sieve (make-vector lim #t)))
       (let loop ((i 0) (t 3) (l '(2)))
         (cond
           ((fx< n (fx* t t))
