@@ -163,5 +163,5 @@
   (_combinations l n))
 
 (define (permutations l)
-  (##sys#check-list l 'permuations)
+  (##sys#check-list l 'permutations)
   (_permutations l))
