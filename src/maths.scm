@@ -72,23 +72,22 @@
            (loop (fx+ i 1) (fx+ t 2) l)))))))
 
 (define-inline (_discrete-log g h p)
-  (let ((n (inexact->exact (ceiling (sqrt (- p 1))))))
+  (let* ((n (inexact->exact (ceiling (sqrt (- p 1))))) (c (expt-mod g (* n (- p 2)) p)))
     (let ((mem (make-hash-table)))
-      (for-each
-        (lambda (i)
-          (hash-table-set! mem (expt-mod g i p) i))
-        (range 0 (- n 1)))
-      (let ((c (expt-mod g (* n (- p 2)) p)))
-        (call/cc
-          (lambda (_)
-            (for-each
-              (lambda (i)
-                (let ((x (modulo (* h (expt-mod c i p)) p)))
-                  (when (hash-table-exists? mem x)
-                    (let ((a (+ (* i n) (hash-table-ref mem x))))
-                      (when (> a 0) (_ a))))))
-              (range 0 (- n 1)))
-            (_ -1)))))))
+      (let loop ((i 0))
+        (unless (= i n)
+          (hash-table-set! mem (expt-mod g i p) i)
+          (loop (+ i 1))))
+      (let loop ((i 0))
+        (if (= i n)
+          -1
+          (let ((x (modulo (* h (expt-mod c i p)) p)))
+            (if (hash-table-exists? mem x)
+              (let ((a (+ (* i n) (hash-table-ref mem x))))
+                (if (> a 0)
+                  a
+                  (loop (+ i 1))))
+              (loop (+ i 1)))))))))
 
 (define-inline (_trial-division-prime? n)
   (let loop ((l _stored-primes))
