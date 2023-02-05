@@ -112,9 +112,16 @@
      (test-group "fibonacci"
        (test '(0 1 1 2 3 5 8 13 21 34) (map fibonacci test-lst))))
 
-   (test-group "expt-mod"
-     (test 4   (expt-mod 2 50 13))
-     (test 445 (expt-mod 4 13 497)))
+   (test-group "modular-inverse"
+     (test 1969 (modular-inverse 42 2017))
+     (test 0    (modular-inverse 40 1))
+     (test 96   (modular-inverse 52 -217))
+     (test 121  (modular-inverse -486 217))
+     (test -1   (modular-inverse 40 2018)))
+
+   (test-group "modular-expt"
+     (test 4   (modular-expt 2 50 13))
+     (test 445 (modular-expt 4 13 497)))
 
    (test-group "primes"
      (test '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47) (primes 50)))

@@ -164,9 +164,15 @@
    (integer)
    integer))
 
-(euler#expt-mod
+(euler#modular-inverse
   (#(procedure #:enforce)
-   euler#expt-mod
+   euler#modular-inverse
+   (integer integer)
+   integer))
+
+(euler#modular-expt
+  (#(procedure #:enforce)
+   euler#modular-expt
    (integer integer integer)
    integer))
 

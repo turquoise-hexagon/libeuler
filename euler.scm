@@ -31,7 +31,8 @@
    ;; maths
    factorial
    fibonacci
-   expt-mod
+   modular-inverse
+   modular-expt
    primes
    discrete-log
    prime?
