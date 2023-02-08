@@ -36,7 +36,7 @@ libeuler
         * primes
         * discrete-log
         * prime?
-        * factorize
+        * factors
         * divisors
     queue
         * priority-queue?

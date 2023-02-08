@@ -153,7 +153,7 @@
           ((prime? d) d)
           (else    (main d (+ c 1))))))))
 
-(define-inline (_factorize n)
+(define-inline (_factors n)
   (let loop ((n n) (acc '()))
     (if (< n 2)
       acc
@@ -166,7 +166,7 @@
               (loop (/ n _) (cons _ acc)))))))))
 
 (define-inline (_divisors n)
-  (let-values (((occurences factors) (unzip2 (run-length (factorize n)))))
+  (let-values (((occurences factors) (unzip2 (run-length (factors n)))))
     (map
       (lambda (multis)
         (apply * (map expt factors multis)))
@@ -223,11 +223,11 @@
     (##sys#error-bad-exact-uinteger n 'prime?))
   (_prime? n))
 
-(define (factorize n)
-  (##sys#check-integer n 'factorize)
+(define (factors n)
+  (##sys#check-integer n 'factors)
   (when (< n 0)
-    (##sys#error-bad-exact-uinteger n 'factorize))
-  (_factorize n))
+    (##sys#error-bad-exact-uinteger n 'factors))
+  (_factors n))
 
 (define (divisors n)
   (##sys#check-integer n 'divisors)

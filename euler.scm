@@ -36,7 +36,7 @@
    primes
    discrete-log
    prime?
-   factorize
+   factors
    divisors
 
    ;; queue

@@ -194,9 +194,9 @@
    (integer)
    boolean))
 
-(euler#factorize
+(euler#factors
   (#(procedure #:enforce)
-   euler#factorize
+   euler#factors
    (integer)
    (list-of integer)))
 

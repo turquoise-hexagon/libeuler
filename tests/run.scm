@@ -134,8 +134,8 @@
      (test '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97) (filter prime? (iota 100)))
      (test '(1000003 1000033 1000037 1000039 1000081 1000099) (filter prime? (iota 100 #e1e6))))
 
-   (test-group "factorize"
-     (test '(6857 1471 839 71) (factorize 600851475143)))
+   (test-group "factors"
+     (test '(6857 1471 839 71) (factors 600851475143)))
 
    (test-group "divisors"
      (test '(1 2 617 1234) (divisors 1234))))
