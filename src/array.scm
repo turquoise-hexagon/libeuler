@@ -69,7 +69,7 @@
 (define-inline (_array-content-copy a)
   (let loop ((i (array-content a)))
     (if (vector? i)
-      (vector-map loop i)
+      (list->vector (map loop (vector->list i)))
       i)))
 
 (define-inline (_array-copy a)

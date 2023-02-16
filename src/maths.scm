@@ -14,6 +14,30 @@
     881 883 887 907 911 919 929 937 941 947 953 967 971 977 983 991 997))
 
 ;; ---
+;; utilities
+;; ---
+
+(define blob-init!
+  (foreign-lambda* void ((blob c) (size_t s) (bool v))
+    "memset(c, v ? ~0 : 0, s * sizeof(*c));"))
+
+(define (make-bitset s v)
+  (let* ((s (+ (quotient s 8) 1)) (c (make-blob s)))
+    (blob-init! c s v)
+    c))
+
+(define bitset-ref
+  (foreign-lambda* bool ((blob c) (size_t i))
+    "return(c[i / 8] & 1 << i % 8);"))
+
+(define bitset-set!
+  (foreign-lambda* void ((blob c) (size_t i) (bool v))
+    "if (v)
+         c[i / 8] |=   1 << i % 8;
+     else
+         c[i / 8] &= ~(1 << i % 8);"))
+
+;; ---
 ;; functions
 ;; ---
 
@@ -68,20 +92,20 @@
 
 (define-inline (_primes n)
   (if (fx< n 2) '()
-    (let* ((lim (fx/ (fx- n 1) 2)) (sieve (make-vector lim #t)))
+    (let* ((lim (fx/ (fx- n 1) 2)) (sieve (make-bitset lim #t)))
       (let loop ((i 0) (t 3) (l '(2)))
         (cond
           ((fx< n (fx* t t))
            (do ((i i (fx+ i 1))
                 (t t (fx+ t 2))
-                (l l (if (vector-ref sieve i)
+                (l l (if (bitset-ref sieve i)
                        (cons t l)
                        l)))
              ((fx= i lim) (reverse l))))
-          ((vector-ref sieve i)
+          ((bitset-ref sieve i)
            (do ((x (fx+ 3 (fx+ (fx* 2 (fx* i i)) (fx* 6 i))) (fx+ x t)))
              ((fx<= lim x) (loop (fx+ i 1) (fx+ t 2) (cons t l)))
-             (vector-set! sieve x #f)))
+             (bitset-set! sieve x #f)))
           (else
            (loop (fx+ i 1) (fx+ t 2) l)))))))
 

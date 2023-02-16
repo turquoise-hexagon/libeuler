@@ -5,10 +5,10 @@
  (version  "0.0.1")
  (dependencies
    srfi-1
-   srfi-69
-   srfi-133)
+   srfi-69)
  (components
    (extension euler
-     (types-file (predefined)))))
+     (types-file (predefined))
+     (csc-options "-O4"))))
 
  ; vim: ft=scheme

@@ -58,7 +58,9 @@
   (import
     (scheme)
     (chicken base)
+    (chicken blob)
     (chicken fixnum)
+    (chicken foreign)
     (chicken sort)
 
     (only (srfi 1)
@@ -70,10 +72,7 @@
       hash-table-exists?
       hash-table-ref
       hash-table-set!
-      make-hash-table)
-
-    (only (srfi 133)
-      vector-map))
+      make-hash-table))
 
   (include "src/digits.scm")
   (include "src/list.scm")
