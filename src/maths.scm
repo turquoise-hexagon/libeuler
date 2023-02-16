@@ -28,7 +28,7 @@
 
 (define bitset-ref
   (foreign-lambda* bool ((blob c) (size_t i))
-    "return(c[i / 8] & 1 << i % 8);"))
+    "C_return(c[i / 8] & 1 << i % 8);"))
 
 (define bitset-set!
   (foreign-lambda* void ((blob c) (size_t i) (bool v))
