@@ -32,10 +32,7 @@
 
 (define bitset-set!
   (foreign-lambda* void ((blob c) (size_t i) (bool v))
-    "if (v)
-         c[i / 8] |=   1 << i % 8;
-     else
-         c[i / 8] &= ~(1 << i % 8);"))
+    "c[i / 8] &= ~(1 << i % 8) | v << i % 8;"))
 
 ;; ---
 ;; functions
