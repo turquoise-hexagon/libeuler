@@ -256,7 +256,7 @@
   (#(procedure #:enforce)
    euler#priority-queue->list
    ((struct euler#priority-queue))
-   (struct euler#priority-queue)))
+   list))
 
 (euler#priority-queue-map->list
   (#(procedure #:enforce)
