@@ -79,12 +79,14 @@
     (array-dimensions a)))
 
 (define-inline (_array-ref a c)
-  (fold
-    (lambda (c d acc)
-      (unless (<= 0 c (- d 1))
-        (error 'array-ref "error - out of range" acc c))
-      (vector-ref acc c))
-    (array-content a) c (array-dimensions a)))
+  (let loop ((acc (array-content a)) (c c) (d (array-dimensions a)))
+    (if (null? c)
+      acc
+      (if (null? d)
+        (error 'array-ref "error - out of range" acc c)
+        (if (<= 0 (car c) (- (car d) 1))
+          (loop (vector-ref acc (car c)) (cdr c) (cdr d))
+          (error 'array-ref "error - out of range" acc c))))))
 
 (define-inline (_array-set! a c i)
   (let loop ((acc (array-content a)) (c c) (d (array-dimensions a)))
@@ -104,7 +106,7 @@
     (if (null? c)
       #t
       (if (null? d)
-        (null? c)
+        #f
         (if (<= 0 (car c) (- (car d) 1))
           (loop (cdr c) (cdr d))
           #f)))))
