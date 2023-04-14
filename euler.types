@@ -170,6 +170,12 @@
    (integer integer)
    integer))
 
+(euler#solve-chinese
+  (#(procedure #:enforce)
+   euler#solve-chinese
+   ((list-of integer) (list-of integer))
+   integer))
+
 (euler#modular-expt
   (#(procedure #:enforce)
    euler#modular-expt

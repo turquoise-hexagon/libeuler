@@ -78,6 +78,17 @@
             nt (- t (* q nt))
             nr (- r (* q nr))))))))
 
+(define-inline (_solve-chinese a n)
+  (let ((p (apply * n)))
+    (let loop ((la a) (ln n) (acc 0))
+      (if (or (null? la)
+              (null? ln))
+        (modulo acc p)
+        (let* ((a (car la)) (n (car ln)) (i (/ p n)) (m (modular-inverse i n)))
+          (if (= m -1)
+            -1
+            (loop (cdr la) (cdr ln) (+ acc (* a m i)))))))))
+
 (define-inline (_modular-expt b e m)
   (let loop ((b b) (e e) (acc 1))
     (if (= e 0)
@@ -214,6 +225,11 @@
   (##sys#check-integer a 'modular-inverse)
   (##sys#check-integer b 'modular-inverse)
   (_modular-inverse a b))
+
+(define (solve-chinese a n)
+  (##sys#check-list a 'solve-chinese)
+  (##sys#check-list n 'solve-chinese)
+  (_solve-chinese a n))
 
 (define (modular-expt b e m)
   (##sys#check-integer b 'modular-expt)

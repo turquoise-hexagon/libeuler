@@ -119,6 +119,10 @@
      (test 121  (modular-inverse -486 217))
      (test -1   (modular-inverse 40 2018)))
 
+   (test-group "solve-chinese"
+     (test 23   (solve-chinese '(2 3 2) '(3 5 7)))
+     (test 1731 (solve-chinese '(1 2 3 4) '(5 7 9 11))))
+
    (test-group "modular-expt"
      (test 4   (modular-expt 2 50 13))
      (test 445 (modular-expt 4 13 497)))

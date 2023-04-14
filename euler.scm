@@ -32,6 +32,7 @@
    factorial
    fibonacci
    modular-inverse
+   solve-chinese
    modular-expt
    primes
    discrete-log
