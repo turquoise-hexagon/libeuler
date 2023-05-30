@@ -39,7 +39,7 @@
 ;; ---
 
 (define-inline (_factorial n)
-  (if (= n 0)
+  (if (zero? n)
     1
     (let loop ((i 1) (acc n))
       (if (> acc i)
@@ -57,7 +57,7 @@
             (loop (+ b (* a c)) b tc tn)))
         (+ b (* a c)))))
   (cond
-    ((= n 0) 0)
+    ((zero? n) 0)
     ((< n 3) 1)
     (else
       (if (even? n)
@@ -65,13 +65,13 @@
         (helper 1 -1)))))
 
 (define-inline (_modular-inverse a b)
-  (let* ((b (if (< b 0) (- b) b))
-         (a (if (< a 0) (- b (modulo (- a) b)) a)))
+  (let* ((b (if (negative? b) (- b) b))
+         (a (if (negative? a) (- b (modulo (- a) b)) a)))
     (let loop ((t 0) (nt 1) (r b) (nr (modulo a b)))
-      (if (= nr 0)
+      (if (zero? nr)
         (cond
           ((> r 1) -1)
-          ((< t 0) (+ t b))
+          ((negative? t) (+ t b))
           (else t))
         (let ((q (quotient r nr)))
           (loop
@@ -84,14 +84,14 @@
       (if (or (null? la)
               (null? ln))
         (modulo acc p)
-        (let* ((a (car la)) (n (car ln)) (i (/ p n)) (m (modular-inverse i n)))
+        (let* ((a (car la)) (n (car ln)) (i (quotient p n)) (m (modular-inverse i n)))
           (if (= m -1)
             -1
             (loop (cdr la) (cdr ln) (+ acc (* a m i)))))))))
 
 (define-inline (_modular-expt b e m)
   (let loop ((b b) (e e) (acc 1))
-    (if (= e 0)
+    (if (zero? e)
       acc
       (loop (modulo (* b b) m) (quotient e 2)
         (if (odd? e)
@@ -129,7 +129,7 @@
           -1
           (if (hash-table-exists? h t)
             (let ((_ (+ (hash-table-ref h t) (* i l))))
-              (if (> _ 0)
+              (if (positive? _)
                 (if (= (modular-expt b _ m) n)
                   _
                   -1)
@@ -143,12 +143,12 @@
       (let ((_ (car l)))
         (if (= n _)
           #t
-          (if (= (modulo n _) 0)
+          (if (zero? (modulo n _))
             #f
             (loop (cdr l))))))))
 
 (define-inline (_witness? n a)
-  (do ((d (- n 1) (/ d 2))
+  (do ((d (- n 1) (quotient d 2))
        (s 0 (+ s 1)))
       ((odd? d)
        (let ((t (modular-expt a d n)))
@@ -157,9 +157,9 @@
            #t
            (do ((s s (- s 1))
                 (t t (modular-expt t 2 n)))
-             ((or (= s 0)
+             ((or (zero? s)
                   (= t (- n 1)))
-              (> s 0))))))))
+              (positive? s))))))))
 
 (define-inline (_prime? n)
   (if (< n 2)
@@ -191,12 +191,12 @@
     (if (< n 2)
       acc
       (if (even? n)
-        (loop (/ n 2) (cons 2 acc))
+        (loop (quotient n 2) (cons 2 acc))
         (let loop ((n n) (acc acc))
           (if (prime? n)
             (cons n acc)
             (let ((_ (_factor n)))
-              (loop (/ n _) (cons _ acc)))))))))
+              (loop (quotient n _) (cons _ acc)))))))))
 
 (define-inline (_divisors n)
   (let-values (((occurences factors) (unzip2 (run-length (factors n)))))
@@ -211,13 +211,13 @@
 
 (define (factorial n)
   (##sys#check-integer n 'factorial)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'factorial))
   (_factorial n))
 
 (define (fibonacci n)
   (##sys#check-integer n 'fibonacci)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'fibonacci))
   (_fibonacci n))
 
@@ -235,14 +235,14 @@
   (##sys#check-integer b 'modular-expt)
   (##sys#check-integer e 'modular-expt)
   (##sys#check-integer m 'modular-expt)
-  (when (< b 0) (##sys#error-bad-exact-uinteger b 'modular-expt))
-  (when (< e 0) (##sys#error-bad-exact-uinteger e 'modular-expt))
-  (when (< m 0) (##sys#error-bad-exact-uinteger m 'modular-expt))
+  (when (negative? b) (##sys#error-bad-exact-uinteger b 'modular-expt))
+  (when (negative? e) (##sys#error-bad-exact-uinteger e 'modular-expt))
+  (when (negative? m) (##sys#error-bad-exact-uinteger m 'modular-expt))
   (_modular-expt b e m))
 
 (define (primes n)
   (##sys#check-fixnum n 'primes)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'primes))
   (_primes n))
 
@@ -250,25 +250,25 @@
   (##sys#check-integer b 'discrete-log)
   (##sys#check-integer n 'discrete-log)
   (##sys#check-integer m 'discrete-log)
-  (when (< b 0) (##sys#error-bad-exact-uinteger b 'discrete-log))
-  (when (< n 0) (##sys#error-bad-exact-uinteger n 'discrete-log))
-  (when (< m 0) (##sys#error-bad-exact-uinteger m 'discrete-log))
+  (when (negative? b) (##sys#error-bad-exact-uinteger b 'discrete-log))
+  (when (negative? n) (##sys#error-bad-exact-uinteger n 'discrete-log))
+  (when (negative? m) (##sys#error-bad-exact-uinteger m 'discrete-log))
   (_discrete-log b n m))
 
 (define (prime? n)
   (##sys#check-integer n 'prime?)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'prime?))
   (_prime? n))
 
 (define (factors n)
   (##sys#check-integer n 'factors)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'factors))
   (_factors n))
 
 (define (divisors n)
   (##sys#check-integer n 'divisors)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'divisors))
   (_divisors n))
