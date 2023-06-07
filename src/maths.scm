@@ -204,13 +204,13 @@
       '(1)
       (join
         (map
-          (lambda (i)
+          (lambda (t)
             (apply
               (lambda (a b)
-                (do ((j 0 (+ j 1))
-                     (i i (* i b))
-                     (acc '() (cons i acc)))
-                  ((> j a) acc)))
+                (do ((i 0 (+ i 1))
+                     (t t (* t b))
+                     (acc '() (cons t acc)))
+                  ((> i a) acc)))
               (car l)))
           (loop (cdr l)))))))
 
