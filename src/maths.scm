@@ -202,17 +202,16 @@
   (let loop ((l (run-length (factors n))))
     (if (null? l)
       '(1)
-      (join
-        (map
-          (lambda (t)
-            (apply
-              (lambda (a b)
-                (do ((i 0 (+ i 1))
-                     (t t (* t b))
-                     (acc '() (cons t acc)))
-                  ((> i a) acc)))
-              (car l)))
-          (loop (cdr l)))))))
+      (foldl
+        (lambda (acc t)
+          (apply
+            (lambda (a b)
+              (do ((i 0 (+ i 1))
+                   (t t (* t b))
+                   (acc acc (cons t acc)))
+                ((> i a) acc)))
+            (car l)))
+        '() (loop (cdr l))))))
 
 ;; ---
 ;; wrappers
