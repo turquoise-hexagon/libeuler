@@ -142,7 +142,7 @@
      (test '(6857 1471 839 71) (factors 600851475143)))
 
    (test-group "divisors"
-     (test '(1 2 617 1234) (divisors 1234))))
+     (test '(1234 2 617 1) (divisors 1234))))
 
  (test-group "queue"
     (test-group "priority-queue?/priority-queue"

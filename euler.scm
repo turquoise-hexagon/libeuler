@@ -66,8 +66,7 @@
 
     (only (srfi 1)
       every
-      fold
-      unzip2)
+      fold)
 
     (only (srfi 69)
       hash-table-exists?

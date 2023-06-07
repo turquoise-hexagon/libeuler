@@ -199,11 +199,20 @@
               (loop (quotient n _) (cons _ acc)))))))))
 
 (define-inline (_divisors n)
-  (let-values (((occurences factors) (unzip2 (run-length (factors n)))))
-    (map
-      (lambda (multis)
-        (apply * (map expt factors multis)))
-      (apply product (map (lambda (_) (range 0 _)) occurences)))))
+  (let loop ((l (run-length (factors n))))
+    (if (null? l)
+      '(1)
+      (join
+        (map
+          (lambda (i)
+            (apply
+              (lambda (a b)
+                (do ((j 0 (+ j 1))
+                     (i i (* i b))
+                     (acc '() (cons i acc)))
+                  ((> j a) acc)))
+              (car l)))
+          (loop (cdr l)))))))
 
 ;; ---
 ;; wrappers
