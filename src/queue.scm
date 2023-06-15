@@ -95,7 +95,7 @@
   (let loop ((q q) (n n) (acc (_priority-queue (priority-queue-comparator? q))))
     (if (_priority-queue-empty? q)
       acc
-      (if (= n 0)
+      (if (zero? n)
         acc
         (loop (_priority-queue-rest q) (- n 1)
           (_priority-queue-insert acc (_priority-queue-first q)))))))
@@ -104,7 +104,7 @@
   (let loop ((q q) (n n))
     (if (_priority-queue-empty? q)
       q
-      (if (= n 0)
+      (if (zero? n)
         q
         (loop (_priority-queue-rest q) (- n 1))))))
 
@@ -164,13 +164,13 @@
 (define (priority-queue-take q n)
   (##sys#check-structure q 'euler#priority-queue 'priority-queue-take)
   (##sys#check-integer   n 'priority-queue-take)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'priority-queue-take))
   (_priority-queue-take q n))
 
 (define (priority-queue-drop q n)
   (##sys#check-structure q 'euler#priority-queue 'priority-queue-drop)
   (##sys#check-integer   n 'priority-queue-drop)
-  (when (< n 0)
+  (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'priority-queue-drop))
   (_priority-queue-drop q n))
