@@ -42,7 +42,7 @@
       (if (list? i)
         (cons
           (let ((_ (length i)))
-            (if (= _ 0)
+            (if (zero? _)
               (list 0)
               (range 0 (- _ 1))))
           (loop (car i)))
@@ -84,7 +84,7 @@
       acc
       (if (null? d)
         (error 'array-ref "error - out of range" acc c)
-        (if (<= 0 (car c) (- (car d) 1))
+        (if (< -1 (car c) (car d))
           (loop (vector-ref acc (car c)) (cdr c) (cdr d))
           (error 'array-ref "error - out of range" acc c))))))
 
@@ -93,11 +93,11 @@
     (let ((c (car c)) (d (car d)) (tc (cdr c)) (td (cdr d)))
       (if (null? tc)
         (if (vector? acc)
-          (if (<= 0 c (- d 1))
+          (if (< -1 c d)
             (vector-set! acc c i)
             (error 'array-set! "error - out of range" acc c))
           (error 'array-set! "error - out of range" acc c))
-        (if (<= 0 c (- d 1))
+        (if (< -1 c d)
           (loop (vector-ref acc c) tc td)
           (error 'array-set! "error - out of range" acc c))))))
 
@@ -107,7 +107,7 @@
       #t
       (if (null? d)
         #f
-        (if (<= 0 (car c) (- (car d) 1))
+        (if (< -1 (car c) (car d))
           (loop (cdr c) (cdr d))
           #f)))))
 
