@@ -141,11 +141,10 @@
     (if (null? l)
       #t
       (let ((_ (car l)))
-        (if (= n _)
-          #t
-          (if (zero? (modulo n _))
-            #f
-            (loop (cdr l))))))))
+        (cond
+          ((> (* _ _) n) #t)
+          ((zero? (modulo n _)) #f)
+          (else (loop (cdr l))))))))
 
 (define-inline (_witness? n a)
   (do ((d (- n 1) (quotient d 2))
