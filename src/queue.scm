@@ -26,16 +26,16 @@
        (cons (car a) (cons b (cdr a)))))))
 
 (define-inline (_priority-queue-merge-pairs ? a)
- (let main ((a a))
-   (cond
-      ((null? a)
-       '())
-      ((null? (cdr a))
-       (car a))
-      (else
-       (_priority-queue-merge ?
-         (_priority-queue-merge ? (car a) (cadr a))
-         (main (cddr a)))))))
+  (let main ((a a))
+    (cond
+       ((null? a)
+        '())
+       ((null? (cdr a))
+        (car a))
+       (else
+        (_priority-queue-merge ?
+          (_priority-queue-merge ? (car a) (cadr a))
+          (main (cddr a)))))))
 
 (define-inline (_priority-queue-insert q i)
   (let ((? (priority-queue-comparator? q)) (a (priority-queue-content q)))
