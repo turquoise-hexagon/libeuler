@@ -153,7 +153,7 @@
         (test #t (priority-queue? test-queue))
         (test test-lst-sorted (priority-queue->list test-queue)))
 
-      (let ((square (lambda (n) (* n))))
+      (let ((square (lambda (n) (* n n))))
         (test-group "priority-queue-map->list"
           (test (map square test-lst-sorted) (priority-queue-map->list test-queue square))))
 
