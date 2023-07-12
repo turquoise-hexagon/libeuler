@@ -18,6 +18,15 @@
         (error 'insert-at "out of range" l n)
         (cons (car tl) (loop (cdr tl) (- tn 1)))))))
 
+(define-inline (_delete-first l i c)
+  (let loop ((l l))
+    (if (null? l)
+      '()
+      (let ((a (car l)) (b (cdr l)))
+        (if (c a i)
+          b
+          (cons a (loop b)))))))
+
 (define-inline (_range s e d)
   (let ((c (cond ((positive? d) <)
                  ((negative? d) >)
@@ -122,6 +131,11 @@
   (when (negative? n)
     (error 'insert-at "out of range" l n))
   (_insert-at l n i))
+
+(define (delete-first l i #!optional (c =))
+  (##sys#check-list    l 'delete-first)
+  (##sys#check-closure c 'delete-first)
+  (_delete-first l i c))
 
 (define (range s e #!optional (d (signum (- e s))))
   (##sys#check-integer s 'range)

@@ -8,6 +8,7 @@
    ;; list
    delete-at
    insert-at
+   delete-first
    range
    run-length
    extremum

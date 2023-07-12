@@ -42,6 +42,12 @@
    (list integer *)
    pair))
 
+(euler#delete-first
+  (#(procedure #:enforce)
+   euler#delete-first
+   (list * #!optional procedure)
+   list))
+
 (euler#range
   (#(procedure #:enforce)
    euler#range

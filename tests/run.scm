@@ -33,6 +33,10 @@
       (test '(2 3) (delete-at '(1 2 3) 0))
       (test '(1 2) (delete-at '(1 2 3) 2)))
 
+    (test-group "delete-first"
+      (test '(1 2 3 4 5) (delete-first '(1 2 2 3 4 5) 2))
+      (test '(1 2 3 4 5) (delete-first '(1 2 3 4 5) 7)))
+
     (test-group "range"
       (test '(0 1 2 3 4 5 6 7 8 9 10) (range 0 10))
       (test '(10 9 8 7 6 5 4 3 2 1 0) (range 10 0))
