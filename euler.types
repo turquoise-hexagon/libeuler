@@ -223,10 +223,10 @@
 ;; ---
 
 (euler#fxsqrt
-  (#(procedure #:enforce))
-  euler#fxsqrt
-  (fixnum)
-  fixnum)
+  (#(procedure #:enforce)
+   euler#fxsqrt
+   (fixnum)
+   fixnum))
 
 (euler#fxexpt
   (#(procedure #:enforce)
