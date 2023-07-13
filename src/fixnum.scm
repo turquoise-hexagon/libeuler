@@ -32,13 +32,17 @@
 
 (define (fxsqrt n)
   (##sys#check-fixnum n 'fxsqrt)
+  (when (fx< n 0)
+    (##sys#error-bad-exact-uinteger n 'fxsqrt))
   (_fxsqrt n))
 
 (define (fxexpt b e)
   (##sys#check-fixnum b 'fxexpt)
   (##sys#check-fixnum e 'fxexpt)
+  (when (fx< e 0)
+    (##sys#error-bad-exact-uinteger e 'fxexpt))
   (_fxexpt b e))
 
 (define (fxabs n)
-  (##sys#check-fixnum n 'fxaba)
+  (##sys#check-fixnum n 'fxabs)
   (_fxabs n))
