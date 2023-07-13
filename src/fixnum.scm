@@ -3,11 +3,13 @@
 ;; ---
 
 (define-inline (_fxsqrt n)
-  (let loop ((i n))
-    (let ((_ (fx/ (fx+ i (fx/ n i)) 2)))
-      (if (fx< _ i)
-        (loop _)
-        i))))
+  (if (fx= n 0)
+    0
+    (let loop ((i n))
+      (let ((_ (fx/ (fx+ i (fx/ n i)) 2)))
+        (if (fx< _ i)
+          (loop _)
+          i)))))
 
 (define-inline (_fxexpt b e)
   (if (fx= e 0)
