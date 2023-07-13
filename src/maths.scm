@@ -17,6 +17,11 @@
 ;; utilities
 ;; ---
 
+(define-inline (check-positive-fixnum n loc)
+  (unless (and (fixnum? n) (fx>= n 0))
+    (error loc "bad argument type - not a positive fixnum" n)
+    (exit 1)))
+
 (define blob-init!
   (foreign-lambda* void ((blob c) (size_t s) (bool v))
     "memset(c, v ? ~0 : 0, s * sizeof(*c));"))
@@ -248,9 +253,7 @@
   (_modular-expt b e m))
 
 (define (primes n)
-  (##sys#check-fixnum n 'primes)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'primes))
+  (check-positive-fixnum n 'primes)
   (_primes n))
 
 (define (discrete-log b n m)

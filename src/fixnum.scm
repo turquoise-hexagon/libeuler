@@ -1,4 +1,13 @@
 ;; ---
+;; utilities
+;; ---
+
+(define-inline (check-positive-fixnum n loc)
+  (unless (and (fixnum? n) (fx>= n 0))
+    (error loc "bad argument type - not a positive fixnum" n)
+    (exit 1)))
+
+;; ---
 ;; functions
 ;; ---
 
@@ -33,16 +42,12 @@
 ;; ---
 
 (define (fxsqrt n)
-  (##sys#check-fixnum n 'fxsqrt)
-  (when (fx< n 0)
-    (##sys#error-bad-exact-uinteger n 'fxsqrt))
+  (check-positive-fixnum n 'fxsqrt)
   (_fxsqrt n))
 
 (define (fxexpt b e)
   (##sys#check-fixnum b 'fxexpt)
-  (##sys#check-fixnum e 'fxexpt)
-  (when (fx< e 0)
-    (##sys#error-bad-exact-uinteger e 'fxexpt))
+  (check-positive-fixnum e 'fxexpt)
   (_fxexpt b e))
 
 (define (fxabs n)
