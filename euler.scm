@@ -41,6 +41,11 @@
    factors
    divisors
 
+   ;; fixnum
+   fxsqrt
+   fxexpt
+   fxabs
+
    ;; queue
    priority-queue?
    priority-queue
@@ -79,4 +84,5 @@
   (include "src/list.scm")
   (include "src/array.scm")
   (include "src/maths.scm")
+  (include "src/fixnum.scm")
   (include "src/queue.scm"))

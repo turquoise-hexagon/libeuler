@@ -148,6 +148,22 @@
    (test-group "divisors"
      (test '(617 1 1234 2) (divisors 1234))))
 
+ (test-group "fixnum"
+   (test-group "fxsqrt"
+     (test 16 (fxsqrt 265))
+     (test 24 (fxsqrt 617))
+     (test 29 (fxsqrt 845)))
+
+   (test-group "fxexpt"
+     (test 10 (fxexpt 10 1))
+     (test 4096 (fxexpt 8 4))
+     (test 16777216 (fxexpt 8 8)))
+
+   (test-group "fxabs"
+     (test 441 (fxabs -441))
+     (test 390 (fxabs -390))
+     (test 869 (fxabs 869))))
+
  (test-group "queue"
     (test-group "priority-queue?/priority-queue"
       (test #t (priority-queue? (priority-queue <))))

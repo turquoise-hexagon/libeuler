@@ -219,6 +219,28 @@
    (list-of integer)))
 
 ;; ---
+;; fixnum
+;; ---
+
+(euler#fxsqrt
+  (#(procedure #:enforce))
+  euler#fxsqrt
+  (fixnum)
+  fixnum)
+
+(euler#fxexpt
+  (#(procedure #:enforce)
+   euler#fxexpt
+   (fixnum fixnum)
+   fixnum))
+
+(euler#fxabs
+  (#(procedure #:enforce)
+   euler#fxabs
+   (fixnum)
+   fixnum))
+
+;; ---
 ;; queue
 ;; ---
 
