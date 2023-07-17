@@ -3,7 +3,7 @@
 ;; ---
 
 (define-inline (check-positive-fixnum n loc)
-  (unless (and (fixnum? n) (fx>= n 0))
+  (when (fx< n 0)
     (error loc "bad argument type - not a positive fixnum" n)
     (exit 1)))
 
@@ -46,10 +46,8 @@
   (_fxsqrt n))
 
 (define (fxexpt b e)
-  (##sys#check-fixnum b 'fxexpt)
   (check-positive-fixnum e 'fxexpt)
   (_fxexpt b e))
 
 (define (fxabs n)
-  (##sys#check-fixnum n 'fxabs)
   (_fxabs n))
