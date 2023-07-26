@@ -39,6 +39,10 @@ libeuler
         * prime?
         * factors
         * divisors
+    fixnum
+        * fxsqrt
+        * fxexpt
+        * fxabs
     queue
         * priority-queue?
         * priority-queue
