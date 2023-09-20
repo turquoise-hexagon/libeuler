@@ -45,6 +45,7 @@
    fxsqrt
    fxexpt
    fxabs
+   fxlcm
 
    ;; queue
    priority-queue?

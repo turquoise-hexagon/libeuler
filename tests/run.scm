@@ -162,7 +162,12 @@
    (test-group "fxabs"
      (test 441 (fxabs -441))
      (test 390 (fxabs -390))
-     (test 869 (fxabs 869))))
+     (test 869 (fxabs 869)))
+
+   (test-group "fxlcm"
+     (test 14874 (fxlcm 111 402))
+     (test 38850 (fxlcm 111 -350))
+     (test 78729 (fxlcm -483 -489))))
 
  (test-group "queue"
     (test-group "priority-queue?/priority-queue"

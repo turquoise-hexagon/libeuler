@@ -37,6 +37,9 @@
     (fxneg n)
     n))
 
+(define-inline (_fxlcm a b)
+  (fx/ (_fxabs (fx* a b)) (fxgcd a b)))
+
 ;; ---
 ;; wrappers
 ;; ---
@@ -51,3 +54,6 @@
 
 (define (fxabs n)
   (_fxabs n))
+
+(define (fxlcm a b)
+  (_fxlcm a b))

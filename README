@@ -44,6 +44,7 @@ libeuler
         * fxsqrt
         * fxexpt
         * fxabs
+        * fxlcm
     queue
         * priority-queue?
         * priority-queue

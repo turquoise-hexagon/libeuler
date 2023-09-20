@@ -240,6 +240,12 @@
    (fixnum)
    fixnum))
 
+(euler#fxlcm
+  (#(procedure #:enforce)
+   euler#fxlcm
+   (fixnum fixnum)
+   fixnum))
+
 ;; ---
 ;; queue
 ;; ---
