@@ -112,6 +112,13 @@
           #f)))))
 
 ;; ---
+;; others
+;; ---
+
+(define-record-printer (array a p)
+  (format p "~s" (_array->list a)))
+
+;; ---
 ;; wrappers
 ;; ---
 

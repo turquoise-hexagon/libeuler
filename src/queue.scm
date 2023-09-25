@@ -109,6 +109,13 @@
         (loop (_priority-queue-rest q) (- n 1))))))
 
 ;; ---
+;; others
+;; ---
+
+(define-record-printer (priority-queue q p)
+  (format p "~s" (_priority-queue->list q)))
+
+;; ---
 ;; wrappers
 ;; ---
 
