@@ -206,16 +206,16 @@
   (let loop ((l (run-length (factors n))))
     (if (null? l)
       '(1)
-      (foldl
-        (lambda (acc t)
-          (apply
-            (lambda (a b)
+      (apply
+        (lambda (a b)
+          (foldl
+            (lambda (acc t)
               (do ((i 0 (+ i 1))
                    (t t (* t b))
                    (acc acc (cons t acc)))
                 ((> i a) acc)))
-            (car l)))
-        '() (loop (cdr l))))))
+            '() (loop (cdr l))))
+        (car l)))))
 
 ;; ---
 ;; wrappers
