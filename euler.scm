@@ -74,7 +74,8 @@
 
     (only (srfi 1)
       every
-      fold)
+      fold
+      xcons)
 
     (only (srfi 69)
       hash-table-exists?

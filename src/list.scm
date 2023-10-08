@@ -111,7 +111,7 @@
       (cons (reverse j) l)
       (let g ((a '()) (b k) (c l))
         (if (pair? b)
-          (g (cons (car b) a) (cdr b) (f (cons (car b) j) (append (reverse a) (cdr b)) c))
+          (g (cons (car b) a) (cdr b) (f (cons (car b) j) (foldl xcons (cdr b) a) c))
           c)))))
 
 ;; ---
