@@ -74,7 +74,6 @@
 
     (only (srfi 1)
       every
-      fold
       xcons)
 
     (only (srfi 69)
