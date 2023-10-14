@@ -218,6 +218,12 @@
    (integer)
    (list-of integer)))
 
+(euler#totient
+  (#(procedure #:enforce)
+   euler#totient
+   (integer)
+   integer))
+
 ;; ---
 ;; fixnum
 ;; ---

@@ -11,25 +11,6 @@
 ;; functions
 ;; ---
 
-(define-inline (_well-formed-list? l)
-  (let loop ((i l))
-    (if (list? i)
-      (if (pair? i)
-        (if (every list? i)
-          (let ((l (length (car i))))
-            (if (every
-                  (lambda (_)
-                    (= (length _) l))
-                  (cdr i))
-              (every loop i)
-              #f))
-          (every
-            (lambda (_)
-              (not (list? _)))
-            i))
-        #f)
-      #t)))
-
 (define-inline (_array-content l)
   (let loop ((i l))
     (if (list? i)

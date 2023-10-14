@@ -1,13 +1,4 @@
 ;; ---
-;; utilities
-;; ---
-
-(define-inline (check-positive-fixnum n loc)
-  (when (fx< n 0)
-    (error loc "bad argument type - not a positive fixnum" n)
-    (exit 1)))
-
-;; ---
 ;; functions
 ;; ---
 

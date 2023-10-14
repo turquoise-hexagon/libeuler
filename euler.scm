@@ -40,6 +40,7 @@
    prime?
    factors
    divisors
+   totient
 
    ;; fixnum
    fxsqrt
@@ -82,9 +83,11 @@
       hash-table-set!
       make-hash-table))
 
-  (include "src/digits.scm")
-  (include "src/list.scm")
+  (include "src/utils/utils.scm")
+
   (include "src/array.scm")
-  (include "src/maths.scm")
+  (include "src/digits.scm")
   (include "src/fixnum.scm")
+  (include "src/list.scm")
+  (include "src/maths.scm")
   (include "src/queue.scm"))

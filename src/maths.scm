@@ -14,32 +14,6 @@
     881 883 887 907 911 919 929 937 941 947 953 967 971 977 983 991 997))
 
 ;; ---
-;; utilities
-;; ---
-
-(define-inline (check-positive-fixnum n loc)
-  (unless (and (fixnum? n) (fx>= n 0))
-    (error loc "bad argument type - not a positive fixnum" n)
-    (exit 1)))
-
-(define blob-init!
-  (foreign-lambda* void ((blob c) (size_t s) (bool v))
-    "memset(c, v ? ~0 : 0, s * sizeof(*c));"))
-
-(define (make-bitset s v)
-  (let* ((s (+ (quotient s 8) 1)) (c (make-blob s)))
-    (blob-init! c s v)
-    c))
-
-(define bitset-ref
-  (foreign-lambda* bool ((blob c) (size_t i))
-    "C_return(c[i / 8] & 1 << i % 8);"))
-
-(define bitset-set!
-  (foreign-lambda* void ((blob c) (size_t i) (bool v))
-    "c[i / 8] &= ~(1 << i % 8) | v << i % 8;"))
-
-;; ---
 ;; functions
 ;; ---
 
@@ -217,6 +191,12 @@
             '() (loop (cdr l))))
         (car l)))))
 
+(define-inline (_totient n)
+  (foldl
+    (lambda (acc i)
+      (- acc (quotient acc i)))
+    n (_delete-successive-duplicates (_factors n))))
+
 ;; ---
 ;; wrappers
 ;; ---
@@ -282,3 +262,9 @@
   (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'divisors))
   (_divisors n))
+
+(define (totient n)
+  (##sys#check-integer n 'totient)
+  (when (negative? n)
+    (##sys#error-bad-exact-uinteger n 'totient))
+  (_totient n))

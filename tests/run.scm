@@ -146,7 +146,11 @@
      (test '(6857 1471 839 71) (factors 600851475143)))
 
    (test-group "divisors"
-     (test '(617 1 1234 2) (divisors 1234))))
+     (test '(617 1 1234 2) (divisors 1234)))
+
+   (test-group "totient"
+     (test 60 (totient 99))
+     (test 44 (totient 69))))
 
  (test-group "fixnum"
    (test-group "fxsqrt"
