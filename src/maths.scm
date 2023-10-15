@@ -29,10 +29,14 @@
 (define-inline (_binomial n k)
   (let main ((n n) (k k))
     (cond
-      ((< k 0) 0)
-      ((> k n) 0)
-      ((= k 0) 1)
-      ((= k n) 1)
+      ((negative? k)
+       0)
+      ((> k n)
+       0)
+      ((zero? k)
+       1)
+      ((= k n)
+       1)
       ((> (+ k k) n)
        (main n (- n k)))
       (else
