@@ -26,6 +26,21 @@
            (loop (+ i i) (- acc i)))
         acc))))
 
+(define-inline (_binomial n k)
+  (let main ((n n) (k k))
+    (cond
+      ((< k 0) 0)
+      ((> k n) 0)
+      ((= k 0) 1)
+      ((= k n) 1)
+      ((> (+ k k) n)
+       (main n (- n k)))
+      (else
+       (let loop ((i 2) (acc (+ (- n k) 1)))
+         (if (> i k)
+           acc
+           (loop (+ i 1) (quotient (* acc (+ (- n k) i)) i))))))))
+
 (define-inline (_fibonacci n)
   (define (helper a b)
     (let loop ((a a) (b b) (c 3) (n (quotient n 2)))
@@ -206,6 +221,11 @@
   (when (negative? n)
     (##sys#error-bad-exact-uinteger n 'factorial))
   (_factorial n))
+
+(define (binomial n k)
+  (##sys#check-integer n 'binomial)
+  (##sys#check-integer n 'binomial)
+  (_binomial n k))
 
 (define (fibonacci n)
   (##sys#check-integer n 'fibonacci)

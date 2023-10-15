@@ -31,6 +31,7 @@
 
    ;; maths
    factorial
+   binomial
    fibonacci
    modular-inverse
    solve-chinese

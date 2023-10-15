@@ -113,6 +113,10 @@
      (test-group "factorial"
        (test '(1 1 2 6 24 120 720 5040 40320 362880) (map factorial test-lst)))
 
+     (test-group "binomial"
+       (test 11628 (binomial 19  5))
+       (test 54264 (binomial 21 15)))
+
      (test-group "fibonacci"
        (test '(0 1 1 2 3 5 8 13 21 34) (map fibonacci test-lst))))
 

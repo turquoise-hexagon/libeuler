@@ -164,6 +164,12 @@
    (integer)
    integer))
 
+(euler#binomial
+  (#(procedure #:enforce)
+   euler#binomial
+   (integer integer)
+   integer))
+
 (euler#fibonacci
   (#(procedure #:enforce)
    euler#fibonacci
