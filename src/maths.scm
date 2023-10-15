@@ -28,22 +28,19 @@
 
 (define-inline (_binomial n k)
   (let main ((n n) (k k))
-    (cond
-      ((negative? k)
-       0)
-      ((> k n)
-       0)
-      ((zero? k)
-       1)
-      ((= k n)
-       1)
-      ((> (+ k k) n)
-       (main n (- n k)))
-      (else
-       (let loop ((i 2) (acc (+ (- n k) 1)))
-         (if (> i k)
-           acc
-           (loop (+ i 1) (quotient (* acc (+ (- n k) i)) i))))))))
+    (let ((_ (- n k)))
+      (cond
+        ((negative? k) 0)
+        ((zero? k) 1)
+        ((negative? _) 0)
+        ((zero? _) 1)
+        ((> (+ k k) n)
+         (main n _))
+        (else
+         (let loop ((i 2) (acc (+ _ 1)))
+           (if (> i k)
+             acc
+             (loop (+ i 1) (quotient (* acc (+ _ i)) i)))))))))
 
 (define-inline (_fibonacci n)
   (define (helper a b)
