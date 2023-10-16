@@ -113,7 +113,7 @@
 ;; ---
 
 (define-record-printer (priority-queue q p)
-  (format p "~s" (_priority-queue->list q)))
+  (format p "@~s" (_priority-queue->list q)))
 
 ;; ---
 ;; wrappers
