@@ -177,7 +177,7 @@
                   (d (gcd (- t h) n)))
              (loop t h d)))
           ((= d n) (main n (+ c 1)))
-          ((prime? d) d)
+          ((_prime? d) d)
           (else    (main d (+ c 1))))))))
 
 (define-inline (_factors n)
@@ -187,7 +187,7 @@
       (if (even? n)
         (loop (quotient n 2) (cons 2 acc))
         (let loop ((n n) (acc acc))
-          (if (prime? n)
+          (if (_prime? n)
             (cons n acc)
             (let ((_ (_factor n)))
               (loop (quotient n _) (cons _ acc)))))))))
