@@ -79,7 +79,7 @@
       (if (or (null? la)
               (null? ln))
         (modulo acc p)
-        (let* ((a (car la)) (n (car ln)) (i (quotient p n)) (m (modular-inverse i n)))
+        (let* ((a (car la)) (n (car ln)) (i (quotient p n)) (m (_modular-inverse i n)))
           (if (= m -1)
             -1
             (loop (cdr la) (cdr ln) (+ acc (* a m i)))))))))
@@ -118,14 +118,14 @@
       (unless (= i l)
         (hash-table-set! h t i)
         (loop (+ i 1) (modulo (* t b) m))))
-    (let ((c (modular-expt (modular-expt b (- m 2) m) l m)))
+    (let ((c (_modular-expt (_modular-expt b (- m 2) m) l m)))
       (let loop ((i 0) (t n))
         (if (= i l)
           -1
           (if (hash-table-exists? h t)
             (let ((_ (+ (hash-table-ref h t) (* i l))))
               (if (positive? _)
-                (if (= (modular-expt b _ m) n)
+                (if (= (_modular-expt b _ m) n)
                   _
                   -1)
                 (loop (+ i 1) (modulo (* t c) m))))
@@ -145,12 +145,12 @@
   (do ((d (- n 1) (quotient d 2))
        (s 0 (+ s 1)))
       ((odd? d)
-       (let ((t (modular-expt a d n)))
+       (let ((t (_modular-expt a d n)))
          (if (or (= t 1)
                  (= t (- n 1)))
            #t
            (do ((s s (- s 1))
-                (t t (modular-expt t 2 n)))
+                (t t (_modular-expt t 2 n)))
              ((or (zero? s)
                   (= t (- n 1)))
               (positive? s))))))))
@@ -193,7 +193,7 @@
               (loop (quotient n _) (cons _ acc)))))))))
 
 (define-inline (_divisors n)
-  (let loop ((l (run-length (factors n))))
+  (let loop ((l (run-length (_factors n))))
     (if (null? l)
       '(1)
       (apply
@@ -211,7 +211,7 @@
   (foldl
     (lambda (acc i)
       (- acc (quotient acc i)))
-    n (_delete-successive-duplicates (_factors n))))
+    n (delete-successive-duplicates (_factors n))))
 
 ;; ---
 ;; wrappers

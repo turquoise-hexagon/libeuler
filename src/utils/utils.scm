@@ -7,7 +7,7 @@
     (error loc "bad argument type - not a positive fixnum" n)
     (exit 1)))
 
-(define-inline (_well-formed-list? l)
+(define-inline (well-formed-list? l)
   (let loop ((i l))
     (if (list? i)
       (if (pair? i)
@@ -51,7 +51,7 @@
 ;; helpers
 ;; ---
 
-(define-inline (_delete-successive-duplicates l #!optional (? =))
+(define-inline (delete-successive-duplicates l #!optional (? =))
   (if (null? l)
     '()
     (let loop ((l l))

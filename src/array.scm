@@ -104,7 +104,7 @@
 ;; ---
 
 (define (list->array l)
-  (unless (_well-formed-list? l)
+  (unless (well-formed-list? l)
     (error 'list->array "error - malformed array list" l))
   (_list->array l))
 
