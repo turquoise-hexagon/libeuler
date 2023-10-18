@@ -22,8 +22,9 @@
     1
     (let loop ((i 1) (acc n))
       (if (> acc i)
-        (* (loop (+ i i) acc)
-           (loop (+ i i) (- acc i)))
+        (let ((_ (+ i i)))
+          (* (loop _ acc)
+             (loop _ (- acc i))))
         acc))))
 
 (define-inline (_binomial n k)
