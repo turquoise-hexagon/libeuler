@@ -7,6 +7,11 @@
     (error loc "bad argument type - not a positive fixnum" n)
     (exit 1)))
 
+(define-inline (check-positive-integer n loc)
+  (when (negative? n)
+    (error loc "bad argument type - not a positive integer" n)
+    (exit 1)))
+
 (define-inline (well-formed-list? l)
   (let loop ((i l))
     (if (list? i)

@@ -13,9 +13,9 @@
     (if (null? l)
       acc
       (let ((i (car l)))
-        (when (negative? i)
-          (##sys#error-bad-exact-uinteger i 'list->number))
-        (loop (cdr l) (+ (car l) (* acc b)))))))
+        (unless (< -1 i b)
+          (error 'list->number "invalid value" i))
+        (loop (cdr l) (+ (* acc b) i))))))
 
 (define-inline (_number->list n b)
   (let loop ((n n) (acc '()))
@@ -24,37 +24,38 @@
       (loop (quotient n b) (cons (modulo n b) acc)))))
 
 (define-inline (_palindrome? n b)
-  (let loop ((i n) (r 0))
+  (let loop ((i n) (acc 0))
     (if (zero? i)
-      (= n r)
-      (loop (quotient i b) (+ (* r b) (modulo i b))))))
+      (= n acc)
+      (loop (quotient i b) (+ (* acc b) (modulo i b))))))
 
 ;; ---
 ;; wrappers
 ;; ---
 
 (define (digitsum n #!optional (b 10))
-  (##sys#check-integer n 'digitsum)
-  (##sys#check-integer b 'digitsum)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'digitsum))
+  (##sys#check-integer    n 'digitsum)
+  (##sys#check-integer    b 'digitsum)
+  (check-positive-integer n 'digitsum)
+  (check-positive-integer b 'digitsum)
   (_digitsum n b))
 
 (define (list->number l #!optional (b 10))
-  (##sys#check-list    l 'list->number)
-  (##sys#check-integer b 'list->number)
+  (##sys#check-list       l 'list->number)
+  (##sys#check-integer    b 'list->number)
+  (check-positive-integer b 'list->number)
   (_list->number l b))
 
 (define (number->list n #!optional (b 10))
-  (##sys#check-integer n 'number->list)
-  (##sys#check-integer b 'number->list)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'number->list))
+  (##sys#check-integer    n 'number->list)
+  (##sys#check-integer    b 'number->list)
+  (check-positive-integer n 'number->list)
+  (check-positive-integer b 'number->list)
   (_number->list n b))
 
 (define (palindrome? n #!optional (b 10))
-  (##sys#check-integer n 'palindrome?)
-  (##sys#check-integer b 'palindrome?)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'palindrome?))
+  (##sys#check-integer    n 'palindrome?)
+  (##sys#check-integer    b 'palindrome?)
+  (check-positive-integer n 'palindrome?)
+  (check-positive-integer b 'palindrome?)
   (_palindrome? n b))
