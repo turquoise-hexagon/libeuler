@@ -43,12 +43,12 @@
 
 (define-inline (_priority-queue-first q)
   (if (_priority-queue-empty? q)
-    (error 'priority-queue-first "error - empty priority queue" q)
+    (error 'priority-queue-first "empty priority queue" q)
     (car (priority-queue-content q))))
 
 (define-inline (_priority-queue-rest q)
   (if (_priority-queue-empty? q)
-    (error 'priority-queue-rest "error - empty priority queue" q)
+    (error 'priority-queue-rest "empty priority queue" q)
     (let ((? (priority-queue-comparator? q)) (a (priority-queue-content q)))
       (make-priority-queue ? (_priority-queue-merge-pairs ? (cdr a))))))
 

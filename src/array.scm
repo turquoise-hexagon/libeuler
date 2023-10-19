@@ -64,10 +64,10 @@
     (if (null? c)
       acc
       (if (null? d)
-        (error 'array-ref "error - out of range" acc c)
+        (error 'array-ref "out of range" acc c)
         (if (< -1 (car c) (car d))
           (loop (vector-ref acc (car c)) (cdr c) (cdr d))
-          (error 'array-ref "error - out of range" acc c))))))
+          (error 'array-ref "out of range" acc c))))))
 
 (define-inline (_array-set! a c i)
   (let loop ((acc (array-content a)) (c c) (d (array-dimensions a)))
@@ -76,11 +76,11 @@
         (if (vector? acc)
           (if (< -1 c d)
             (vector-set! acc c i)
-            (error 'array-set! "error - out of range" acc c))
-          (error 'array-set! "error - out of range" acc c))
+            (error 'array-set! "out of range" acc c))
+          (error 'array-set! "out of range" acc c))
         (if (< -1 c d)
           (loop (vector-ref acc c) tc td)
-          (error 'array-set! "error - out of range" acc c))))))
+          (error 'array-set! "out of range" acc c))))))
 
 (define-inline (_array-exists? a c)
   (let loop ((c c) (d (array-dimensions a)))
@@ -105,7 +105,7 @@
 
 (define (list->array l)
   (unless (well-formed-list? l)
-    (error 'list->array "error - malformed array list" l))
+    (error 'list->array "malformed array list" l))
   (_list->array l))
 
 (define (array->list a)
