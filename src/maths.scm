@@ -138,8 +138,8 @@
       #t
       (let ((_ (car l)))
         (cond
-          ((> (* _ _) n) #t)
-          ((zero? (modulo n _)) #f)
+          ((fx> (fx*   _ _) n) #t)
+          ((fx= (fxmod n _) 0) #f)
           (else (loop (cdr l))))))))
 
 (define-inline (_witness? n a)
