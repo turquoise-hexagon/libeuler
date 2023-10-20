@@ -33,13 +33,13 @@
 (euler#delete-at
   (#(procedure #:enforce)
    euler#delete-at
-   (pair integer)
+   (pair fixnum)
    list))
 
 (euler#insert-at
   (#(procedure #:enforce)
    euler#insert-at
-   (list integer *)
+   (list fixnum *)
    pair))
 
 (euler#delete-first
@@ -58,7 +58,7 @@
   (#(procedure #:enforce)
    euler#run-length
    (list #!optional procedure)
-   (list-of (pair integer *))))
+   (list-of (pair fixnum *))))
 
 (euler#extremum
   (#(procedure #:enforce)
@@ -75,7 +75,7 @@
 (euler#power
   (#(procedure #:enforce)
    euler#power
-   (list integer)
+   (list fixnum)
    list))
 
 (euler#powerset
@@ -87,7 +87,7 @@
 (euler#combinations
   (#(procedure #:enforce)
    euler#combinations
-   (list integer)
+   (list fixnum)
    list))
 
 (euler#permutations

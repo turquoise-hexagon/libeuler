@@ -67,3 +67,6 @@
             (if (? h (cadr l))
               (loop t)
               (cons h (loop t)))))))))
+
+(define-inline (xcons a b)
+  (cons b a))

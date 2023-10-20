@@ -6,24 +6,24 @@
   (let loop ((tl l) (tn n))
     (if (null? tl)
       (error 'delete-at "out of range" l n)
-      (if (zero? tn)
+      (if (fx= tn 0)
         (cdr tl)
-        (cons (car tl) (loop (cdr tl) (- tn 1)))))))
+        (cons (car tl) (loop (cdr tl) (fx- tn 1)))))))
 
 (define-inline (_insert-at l n i)
   (let loop ((tl l) (tn n))
-    (if (zero? tn)
+    (if (fx= tn 0)
       (cons i tl)
       (if (null? tl)
         (error 'insert-at "out of range" l n)
-        (cons (car tl) (loop (cdr tl) (- tn 1)))))))
+        (cons (car tl) (loop (cdr tl) (fx- tn 1)))))))
 
-(define-inline (_delete-first l i c)
+(define-inline (_delete-first l i ?)
   (let loop ((l l))
     (if (null? l)
       '()
       (let ((a (car l)) (b (cdr l)))
-        (if (c a i)
+        (if (? a i)
           b
           (cons a (loop b)))))))
 
@@ -36,7 +36,7 @@
         acc
         (loop (- i d) (cons i acc))))))
 
-(define-inline (_run-length l c)
+(define-inline (_run-length l ?)
   (let loop ((l l))
     (if (null? l)
       '()
@@ -44,16 +44,16 @@
         (let subloop ((l (cdr l)) (acc 1))
           (if (null? l)
             (cons (list acc i) (loop l))
-            (if (c (car l) i)
-              (subloop (cdr l) (+ acc 1))
+            (if (? (car l) i)
+              (subloop (cdr l) (fx+ acc 1))
               (cons (list acc i) (loop l)))))))))
 
-(define-inline (_extremum l p c)
+(define-inline (_extremum l p ?)
   (let loop ((l (cdr l)) (t (p (car l))) (acc (car l)))
     (if (null? l)
       acc
       (let* ((i (car l)) (n (p i)))
-        (if (c n t)
+        (if (? n t)
           (loop (cdr l) n i)
           (loop (cdr l) t acc))))))
 
@@ -68,9 +68,9 @@
 
 (define-inline (_power l n)
   (let loop ((i 0) (acc '()))
-    (if (= i n)
+    (if (fx= i n)
       (_product acc)
-      (loop (+ i 1) (cons l acc)))))
+      (loop (fx+ i 1) (cons l acc)))))
 
 (define-inline (_powerset l)
   (let loop ((l l))
@@ -87,9 +87,9 @@
 
 (define-inline (_combinations l n)
   (cond
-    ((zero? n)
+    ((fx= n 0)
      '(()))
-    ((> n (length l))
+    ((fx> n (length l))
      '())
     (else
      (let loop ((l l) (t (list-tail l n)))
@@ -119,23 +119,21 @@
 ;; ---
 
 (define (delete-at l n)
-  (##sys#check-list    l 'delete-at)
-  (##sys#check-integer n 'delete-at)
-  (when (negative? n)
-    (error 'delete-at "out of range" l n))
+  (##sys#check-list   l 'delete-at)
+  (##sys#check-fixnum n 'delete-at)
+  (when (fx< n 0) (error 'delete-at "out of range" l n))
   (_delete-at l n))
 
 (define (insert-at l n i)
-  (##sys#check-list    l 'insert-at)
-  (##sys#check-integer n 'insert-at)
-  (when (negative? n)
-    (error 'insert-at "out of range" l n))
+  (##sys#check-list   l 'insert-at)
+  (##sys#check-fixnum n 'insert-at)
+  (when (fx< n 0) (error 'insert-at "out of range" l n))
   (_insert-at l n i))
 
-(define (delete-first l i #!optional (c =))
+(define (delete-first l i #!optional (? =))
   (##sys#check-list    l 'delete-first)
-  (##sys#check-closure c 'delete-first)
-  (_delete-first l i c))
+  (##sys#check-closure ? 'delete-first)
+  (_delete-first l i ?))
 
 (define (range s e #!optional (d (signum (- e s))))
   (##sys#check-integer s 'range)
@@ -143,26 +141,25 @@
   (##sys#check-integer d 'range)
   (_range s e d))
 
-(define (run-length l #!optional (c =))
+(define (run-length l #!optional (? =))
   (##sys#check-list    l 'run-length)
-  (##sys#check-closure c 'run-length)
-  (_run-length l c))
+  (##sys#check-closure ? 'run-length)
+  (_run-length l ?))
 
-(define (extremum l #!optional (p identity) (c <))
+(define (extremum l #!optional (p identity) (? <))
   (##sys#check-pair    l 'extremum)
   (##sys#check-closure p 'extremum)
-  (##sys#check-closure c 'extremum)
-  (_extremum l p c))
+  (##sys#check-closure ? 'extremum)
+  (_extremum l p ?))
 
 (define (product . l)
   (##sys#check-list l 'product)
   (_product l))
 
 (define (power l n)
-  (##sys#check-list    l 'power)
-  (##sys#check-integer n 'power)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'power))
+  (##sys#check-list      l 'power)
+  (##sys#check-fixnum    n 'power)
+  (check-positive-fixnum n 'power)
   (_power l n))
 
 (define (powerset l)
@@ -170,10 +167,9 @@
   (_powerset l))
 
 (define (combinations l n)
-  (##sys#check-list    l 'combinations)
-  (##sys#check-integer n 'combinations)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'combinations))
+  (##sys#check-list      l 'combinations)
+  (##sys#check-fixnum    n 'combinations)
+  (check-positive-fixnum n 'combinations)
   (_combinations l n))
 
 (define (permutations l)
