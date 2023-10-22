@@ -35,7 +35,7 @@
       acc
       (loop (quotient n b) (+ acc (modulo n b))))))
 
-(define-inline (_palindrome?/fixnun n b)
+(define-inline (_palindrome?/fixnum n b)
   (let loop ((i n) (acc 0))
     (if (fx= i 0)
       (fx= n acc)
@@ -86,6 +86,6 @@
   (check-positive-integer b 'palindrome?)
   ((if (and (fixnum? n)
             (fixnum? b))
-     _palindrome?/fixnun
+     _palindrome?/fixnum
      _palindrome?/bignum)
    n b))
