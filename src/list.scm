@@ -27,16 +27,7 @@
           b
           (cons a (loop b)))))))
 
-(define-inline (_range/fixnum s e d)
-  (let ((? (cond ((fx> d 0) fx<)
-                 ((fx< d 0) fx>)
-                 (else      fx=))))
-    (let loop ((i e) (acc '()))
-      (if (? i s)
-        acc
-        (loop (fx- i d) (cons i acc))))))
-
-(define-inline (_range/bignum s e d)
+(define-inline (_range s e d)
   (let ((c (cond ((positive? d) <)
                  ((negative? d) >)
                  (else =))))
@@ -148,12 +139,7 @@
   (##sys#check-integer s 'range)
   (##sys#check-integer e 'range)
   (##sys#check-integer d 'range)
-  ((if (and (fixnum? s)
-            (fixnum? e)
-            (fixnum? d))
-     _range/fixnum
-     _range/bignum)
-   s e d))
+  (_range s e d))
 
 (define (run-length l #!optional (? =))
   (##sys#check-list    l 'run-length)
