@@ -11,7 +11,7 @@
 ;; ---
 
 (define-inline (_priority-queue ?)
-  (make-priority-queue ? '()))
+  (##sys#make-structure 'euler#priority-queue ? '()))
 
 (define-inline (_priority-queue-empty? q)
   (null? (##sys#slot q 2)))
@@ -39,7 +39,7 @@
 
 (define-inline (_priority-queue-insert q i)
   (let ((? (##sys#slot q 1)) (a (##sys#slot q 2)))
-    (make-priority-queue ? (_priority-queue-merge ? (list i) a))))
+    (##sys#make-structure 'euler#priority-queue ? (_priority-queue-merge ? (list i) a))))
 
 (define-inline (_priority-queue-first q)
   (if (_priority-queue-empty? q)
@@ -50,7 +50,7 @@
   (if (_priority-queue-empty? q)
     (error 'priority-queue-rest "empty priority queue" q)
     (let ((? (##sys#slot q 1)) (a (##sys#slot q 2)))
-      (make-priority-queue ? (_priority-queue-merge-pairs ? (cdr a))))))
+      (##sys#make-structure 'euler#priority-queue ? (_priority-queue-merge-pairs ? (cdr a))))))
 
 (define-inline (_list->priority-queue l ?)
   (let loop ((l l) (acc (_priority-queue ?)))
