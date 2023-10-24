@@ -194,7 +194,7 @@
               (loop (quotient n _) (cons _ acc)))))))))
 
 (define-inline (_divisors n)
-  (let loop ((l (run-length (_factors n))))
+  (let loop ((l (_run-length (_factors n) =)))
     (if (null? l)
       '(1)
       (apply
