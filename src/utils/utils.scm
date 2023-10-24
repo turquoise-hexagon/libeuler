@@ -56,7 +56,7 @@
 ;; helpers
 ;; ---
 
-(define-inline (delete-successive-duplicates l #!optional (? =))
+(define-inline (delete-successive-duplicates l ?)
   (if (null? l)
     '()
     (let loop ((l l))

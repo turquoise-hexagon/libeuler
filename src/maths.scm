@@ -212,7 +212,7 @@
   (foldl
     (lambda (acc i)
       (- acc (quotient acc i)))
-    n (delete-successive-duplicates (_factors n))))
+    n (delete-successive-duplicates (_factors n) =)))
 
 ;; ---
 ;; wrappers
