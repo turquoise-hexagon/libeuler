@@ -337,13 +337,13 @@
 (euler#priority-queue-take
   (#(procedure #:enforce)
    euler#priority-queue-take
-   ((struct euler#priority-queue) integer)
+   ((struct euler#priority-queue) fixnum)
    (struct euler#priority-queue)))
 
 (euler#priority-queue-drop
   (#(procedure #:enforce)
    euler#priority-queue-drop
-   ((struct euler#priority-queue) integer)
+   ((struct euler#priority-queue) fixnum)
    (struct euler#priority-queue)))
 
 ; vim: ft=scheme

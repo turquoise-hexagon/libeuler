@@ -14,7 +14,7 @@
   (make-priority-queue ? '()))
 
 (define-inline (_priority-queue-empty? q)
-  (null? (priority-queue-content q)))
+  (null? (##sys#slot q 2)))
 
 (define-inline (_priority-queue-merge ? a b)
   (cond
@@ -38,18 +38,18 @@
          (main (cddr a)))))))
 
 (define-inline (_priority-queue-insert q i)
-  (let ((? (priority-queue-comparator? q)) (a (priority-queue-content q)))
+  (let ((? (##sys#slot q 1)) (a (##sys#slot q 2)))
     (make-priority-queue ? (_priority-queue-merge ? (list i) a))))
 
 (define-inline (_priority-queue-first q)
   (if (_priority-queue-empty? q)
     (error 'priority-queue-first "empty priority queue" q)
-    (car (priority-queue-content q))))
+    (car (##sys#slot q 2))))
 
 (define-inline (_priority-queue-rest q)
   (if (_priority-queue-empty? q)
     (error 'priority-queue-rest "empty priority queue" q)
-    (let ((? (priority-queue-comparator? q)) (a (priority-queue-content q)))
+    (let ((? (##sys#slot q 1)) (a (##sys#slot q 2)))
       (make-priority-queue ? (_priority-queue-merge-pairs ? (cdr a))))))
 
 (define-inline (_list->priority-queue l ?)
@@ -92,21 +92,21 @@
           (loop (_priority-queue-rest q)))))))
 
 (define-inline (_priority-queue-take q n)
-  (let loop ((q q) (n n) (acc (_priority-queue (priority-queue-comparator? q))))
+  (let loop ((q q) (n n) (acc (_priority-queue (##sys#slot q 1))))
     (if (_priority-queue-empty? q)
       acc
-      (if (zero? n)
+      (if (fx= n 0)
         acc
-        (loop (_priority-queue-rest q) (- n 1)
+        (loop (_priority-queue-rest q) (fx- n 1)
           (_priority-queue-insert acc (_priority-queue-first q)))))))
 
 (define-inline (_priority-queue-drop q n)
   (let loop ((q q) (n n))
     (if (_priority-queue-empty? q)
       q
-      (if (zero? n)
+      (if (fx= n 0)
         q
-        (loop (_priority-queue-rest q) (- n 1))))))
+        (loop (_priority-queue-rest q) (fx- n 1))))))
 
 ;; ---
 ;; others
@@ -170,14 +170,12 @@
 
 (define (priority-queue-take q n)
   (##sys#check-structure q 'euler#priority-queue 'priority-queue-take)
-  (##sys#check-integer   n 'priority-queue-take)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'priority-queue-take))
+  (##sys#check-fixnum    n 'priority-queue-take)
+  (check-positive-fixnum n 'priority-queue-take)
   (_priority-queue-take q n))
 
 (define (priority-queue-drop q n)
   (##sys#check-structure q 'euler#priority-queue 'priority-queue-drop)
-  (##sys#check-integer   n 'priority-queue-drop)
-  (when (negative? n)
-    (##sys#error-bad-exact-uinteger n 'priority-queue-drop))
+  (##sys#check-fixnum    n 'priority-queue-drop)
+  (check-positive-fixnum n 'priority-queue-drop)
   (_priority-queue-drop q n))
