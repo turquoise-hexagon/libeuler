@@ -161,10 +161,12 @@
     #f
     (if (< n #e1e6)
       (_trial-division-prime? n)
-      (every
-        (lambda (a)
-          (_witness? n a))
-        '(2 325 9375 28178 450775 9780504 1795265022)))))
+      (let loop ((l '(2 325 9375 28178 450775 9780504 1795265022)))
+        (if (null? l)
+          #t
+          (if (_witness? n (car l))
+            (loop (cdr l))
+            #f))))))
 
 (define-inline (_factor n)
   (let main ((n n) (c 1))
