@@ -19,15 +19,12 @@
 
 (define-inline (_array-indexes l)
   (apply product
-    (let loop ((i l))
-      (if (list? i)
-        (cons
-          (let ((_ (length i)))
-            (if (zero? _)
-              (list 0)
-              (range 0 (- _ 1))))
-          (loop (car i)))
-        '()))))
+    (map
+      (lambda (i)
+        (if (fx= i 1)
+          '(0)
+          (range 0 (fx- i 1))))
+      l)))
 
 (define-inline (_array-dimensions l)
   (let loop ((i l))
@@ -36,49 +33,50 @@
       '())))
 
 (define-inline (_list->array l)
-  (make-array
-    (_array-content l)
-    (_array-indexes l)
-    (_array-dimensions l)))
+  (let*
+    ((c (_array-content    l))
+     (d (_array-dimensions l))
+     (i (_array-indexes    d)))
+    (##sys#make-structure 'euler#array c i d)))
 
 (define-inline (_array->list a)
-  (let loop ((i (array-content a)))
+  (let loop ((i (##sys#slot a 1)))
     (if (vector? i)
       (map loop (vector->list i))
       i)))
 
 (define-inline (_array-content-copy a)
-  (let loop ((i (array-content a)))
+  (let loop ((i (##sys#slot a 1)))
     (if (vector? i)
       (list->vector (map loop (vector->list i)))
       i)))
 
 (define-inline (_array-copy a)
-  (make-array
+  (##sys#make-structure 'euler#array
     (_array-content-copy a)
-    (array-indexes a)
-    (array-dimensions a)))
+    (##sys#slot a 2)
+    (##sys#slot a 3)))
 
 (define-inline (_array-ref a c)
-  (let loop ((acc (array-content a)) (c c) (d (array-dimensions a)))
+  (let loop ((acc (##sys#slot a 1)) (c c) (d (##sys#slot a 3)))
     (if (null? c)
       acc
       (if (null? d)
         (error 'array-ref "out of range" acc c)
-        (if (< -1 (car c) (car d))
+        (if (fxclosed? -1 (car c) (car d))
           (loop (vector-ref acc (car c)) (cdr c) (cdr d))
           (error 'array-ref "out of range" acc c))))))
 
 (define-inline (_array-set! a c i)
-  (let loop ((acc (array-content a)) (c c) (d (array-dimensions a)))
+  (let loop ((acc (##sys#slot a 1)) (c c) (d (##sys#slot a 3)))
     (let ((c (car c)) (d (car d)) (tc (cdr c)) (td (cdr d)))
       (if (null? tc)
         (if (vector? acc)
-          (if (< -1 c d)
+          (if (fxclosed? -1 c d)
             (vector-set! acc c i)
             (error 'array-set! "out of range" acc c))
           (error 'array-set! "out of range" acc c))
-        (if (< -1 c d)
+        (if (fxclosed? -1 c d)
           (loop (vector-ref acc c) tc td)
           (error 'array-set! "out of range" acc c))))))
 
@@ -88,7 +86,7 @@
       #t
       (if (null? d)
         #f
-        (if (< -1 (car c) (car d))
+        (if (fxclosed? -1 (car c) (car d))
           (loop (cdr c) (cdr d))
           #f)))))
 

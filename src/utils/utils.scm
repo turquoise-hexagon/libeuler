@@ -12,6 +12,10 @@
     (error loc "bad argument type - not a positive integer" n)
     (exit 1)))
 
+(define-inline (fxclosed? a b c)
+  (and (fx< a b)
+       (fx< b c)))
+
 (define-inline (well-formed-list? l)
   (let loop ((i l))
     (if (list? i)
@@ -20,7 +24,7 @@
           (let ((l (length (car i))))
             (if (every
                   (lambda (_)
-                    (= (length _) l))
+                    (fx= (length _) l))
                   (cdr i))
               (every loop i)
               #f))
@@ -40,7 +44,7 @@
     "memset(c, v ? ~0 : 0, s * sizeof(*c));"))
 
 (define (make-bitset s v)
-  (let* ((s (+ (quotient s 8) 1)) (c (make-blob s)))
+  (let* ((s (fx+ (fx/ s 8) 1)) (c (make-blob s)))
     (blob-init! c s v)
     c))
 
