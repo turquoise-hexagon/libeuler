@@ -72,5 +72,14 @@
               (loop t)
               (cons h (loop t)))))))))
 
+(define-inline (map/vector f v)
+  (let* ((l (vector-length v)) (t (make-vector l)))
+    (let loop ((i 0))
+      (if (fx= i l)
+        t
+        (begin
+          (vector-set! t i (f (vector-ref v i)))
+          (loop (fx+ i 1)))))))
+
 (define-inline (xcons a b)
   (cons b a))

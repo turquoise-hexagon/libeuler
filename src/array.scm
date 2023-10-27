@@ -48,7 +48,7 @@
 (define-inline (_array-content-copy a)
   (let loop ((i (##sys#slot a 1)))
     (if (vector? i)
-      (list->vector (map loop (vector->list i)))
+      (map/vector loop i)
       i)))
 
 (define-inline (_array-copy a)
