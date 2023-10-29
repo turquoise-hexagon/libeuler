@@ -35,6 +35,18 @@
       acc
       (loop (quotient n b) (+ acc (modulo n b))))))
 
+(define-inline (_integer-log/fixnum n b)
+  (let loop ((n n) (acc 0))
+    (if (fx= n 0)
+      acc
+      (loop (fx/ n b) (fx+ acc 1)))))
+
+(define-inline (_integer-log/bignum n b)
+  (let loop ((n n) (acc 0))
+    (if (zero? n)
+      acc
+      (loop (quotient n b) (+ acc 1)))))
+
 (define-inline (_palindrome? n b)
   (let loop ((i n) (acc 0))
     (if (zero? i)
@@ -71,6 +83,16 @@
             (fixnum? b))
      _digitsum/fixnum
      _digitsum/bignum)
+   n b))
+
+(define (integer-log n #!optional (b 10))
+  (##sys#check-integer    n 'integer-log)
+  (##sys#check-integer    b 'integer-log)
+  (check-positive-integer b 'integer-log)
+  ((if (and (fixnum? n)
+            (fixnum? b))
+     _integer-log/fixnum
+     _integer-log/bignum)
    n b))
 
 (define (palindrome? n #!optional (b 10))

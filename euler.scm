@@ -3,6 +3,7 @@
    digitsum
    list->number
    number->list
+   integer-log
    palindrome?
 
    ;; list

@@ -20,6 +20,12 @@
    (integer #!optional integer)
    (list-of integer)))
 
+(euler#integer-log
+  (#(procedure #:enforce)
+   euler#integer-log
+   (integer #!optional integer)
+   integer))
+
 (euler#palindrome?
   (#(procedure #:enforce)
    euler#palindrome?
