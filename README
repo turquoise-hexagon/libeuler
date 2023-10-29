@@ -41,6 +41,7 @@ libeuler
         * prime?
         * factors
         * divisors
+        * totient
     fixnum
         * fxsqrt
         * fxexpt
