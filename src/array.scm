@@ -95,7 +95,9 @@
 ;; ---
 
 (define-record-printer (array a p)
-  (format p "@~s" (_array->list a)))
+  (let ((_ (_array->list a)))
+    (##sys#print "@" #f p)
+    (##sys#print  _  #f p)))
 
 ;; ---
 ;; wrappers

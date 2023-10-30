@@ -113,7 +113,9 @@
 ;; ---
 
 (define-record-printer (priority-queue q p)
-  (format p "@~s" (_priority-queue->list q)))
+  (let ((_ (_priority-queue->list q)))
+    (##sys#print "@" #f p)
+    (##sys#print  _  #f p)))
 
 ;; ---
 ;; wrappers

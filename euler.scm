@@ -72,8 +72,6 @@
     (chicken blob)
     (chicken fixnum)
     (chicken foreign)
-    (chicken format)
-    (chicken sort)
 
     (only (srfi 1)
       every)
