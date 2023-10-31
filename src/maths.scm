@@ -197,22 +197,22 @@
   (let loop ((l (_run-length (_factors n) =)))
     (if (null? l)
       '(1)
-      (apply
-        (lambda (a b)
-          (foldl
-            (lambda (acc t)
-              (do ((i 0 (+ i 1))
-                   (t t (* t b))
-                   (acc acc (cons t acc)))
-                ((> i a) acc)))
-            '() (loop (cdr l))))
-        (car l)))))
+      (let* ((_ (car l))
+             (a (car _))
+             (b (cdr _)))
+        (foldl
+          (lambda (acc t)
+            (do ((i 0 (+ i 1))
+                 (t t (* t b))
+                 (acc acc (cons t acc)))
+              ((> i a) acc)))
+          '() (loop (cdr l)))))))
 
 (define-inline (_totient n)
   (foldl
     (lambda (acc i)
-      (- acc (quotient acc i)))
-    n (delete-successive-duplicates (_factors n) =)))
+      (- acc (quotient acc (cdr i))))
+    n (_run-length (_factors n) =)))
 
 ;; ---
 ;; wrappers

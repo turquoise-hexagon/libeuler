@@ -74,7 +74,8 @@
     (chicken foreign)
 
     (only (srfi 1)
-      every)
+      every
+      xcons)
 
     (only (srfi 69)
       hash-table-exists?

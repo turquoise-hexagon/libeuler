@@ -48,9 +48,9 @@
       (test '(0 2 4 6 8 10)           (range 0 10 2)))
 
     (test-group "run-length"
-      (test '((2 1))             (run-length '(1 1)))
-      (test '((1 1) (1 2) (2 1)) (run-length '(1 2 1 1)))
-      (test '((3 1) (2 2) (1 1)) (run-length '(1 1 1 2 2 1))))
+      (test '((2 . 1))             (run-length '(1 1)))
+      (test '((1 . 1) (1 . 2) (2 . 1)) (run-length '(1 2 1 1)))
+      (test '((3 . 1) (2 . 2) (1 . 1)) (run-length '(1 1 1 2 2 1))))
 
     (test-group "extremum"
       (test 1       (extremum '(1 2 3 4 5)))

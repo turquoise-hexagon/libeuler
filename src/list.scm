@@ -43,10 +43,10 @@
       (let ((i (car l)))
         (let subloop ((l (cdr l)) (acc 1))
           (if (null? l)
-            (cons (list acc i) (loop l))
+            (cons (cons acc i) (loop l))
             (if (? (car l) i)
               (subloop (cdr l) (fx+ acc 1))
-              (cons (list acc i) (loop l)))))))))
+              (cons (cons acc i) (loop l)))))))))
 
 (define-inline (_extremum l p ?)
   (let loop ((l (cdr l)) (t (p (car l))) (acc (car l)))

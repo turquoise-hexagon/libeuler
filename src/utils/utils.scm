@@ -60,18 +60,6 @@
 ;; helpers
 ;; ---
 
-(define-inline (delete-successive-duplicates l ?)
-  (if (null? l)
-    '()
-    (let loop ((l l))
-      (let ((t (cdr l)))
-        (if (null? t)
-          l
-          (let ((h (car l)))
-            (if (? h (cadr l))
-              (loop t)
-              (cons h (loop t)))))))))
-
 (define-inline (map/vector f v)
   (let* ((l (vector-length v)) (t (make-vector l)))
     (let loop ((i 0))
@@ -80,6 +68,3 @@
         (begin
           (vector-set! t i (f (vector-ref v i)))
           (loop (fx+ i 1)))))))
-
-(define-inline (xcons a b)
-  (cons b a))
