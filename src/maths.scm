@@ -169,8 +169,8 @@
 (define-inline (_factor n)
   (cond
     ((< n 2) #f)
-    ((prime? n) n)
     ((even? n) 2)
+    ((prime? n) n)
     (else
      (let main ((n n) (c 1))
        (let ((f (lambda (x) (modulo (+ (* x x) c) n))))
