@@ -194,44 +194,46 @@
         acc))))
 
 (define-inline (_divisors n)
-  (let loop ((n n))
-    (if (= n 1)
-      '(1)
-      (let ((a (_factor n)))
-        (let subloop ((n n) (b 0))
-          (if (zero? (modulo n a))
-            (subloop (quotient n a) (+ b 1))
-            (foldl
-              (lambda (acc t)
-                (do ((i 0 (+ i 1))
-                     (t t (* t a))
-                     (acc acc (cons t acc)))
-                  ((> i b) acc)))
-              '() (loop n))))))))
+  (if (zero? n)
+    '()
+    (let loop ((n n))
+      (if (= n 1)
+        '(1)
+        (let ((a (_factor n)))
+          (let subloop ((n n) (b 0))
+            (if (zero? (modulo n a))
+              (subloop (quotient n a) (+ b 1))
+              (foldl
+                (lambda (acc t)
+                  (do ((i 0 (+ i 1))
+                       (t t (* t a))
+                       (acc acc (cons t acc)))
+                    ((> i b) acc)))
+                '() (loop n)))))))))
 
 (define-inline (_totient n)
   (let loop ((n n) (acc n))
-    (if (= n 1)
-      acc
-      (let ((_ (_factor n)))
+    (let ((_ (_factor n)))
+      (if _
         (let subloop ((n n))
           (if (zero? (modulo n _))
             (subloop (quotient n _))
-            (loop n (- acc (quotient acc _)))))))))
+            (loop n (- acc (quotient acc _)))))
+        acc))))
 
 (define-inline (_mobius n)
-  (let loop ((n n) (a 0))
-    (if (= n 1)
-      (if (even? a)
-        +1
-        -1)
-      (let ((_ (_factor n)))
-        (let subloop ((n n) (b 0))
-          (if (zero? (modulo n _))
-            (subloop (quotient n _) (+ b 1))
-            (if (> b 1)
-              0
-              (loop n (+ a b)))))))))
+  (if (zero? n)
+    0
+    (let loop ((n n) (a 0))
+      (if (= n 1)
+        (if (even? a) +1 -1)
+        (let ((_ (_factor n)))
+          (let subloop ((n n) (b 0))
+            (if (zero? (modulo n _))
+              (subloop (quotient n _) (+ b 1))
+              (if (> b 1)
+                0
+                (loop n (+ a b))))))))))
 
 ;; ---
 ;; wrappers
