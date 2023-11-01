@@ -155,11 +155,15 @@
      (test '(6857 1471 839 71) (factors 600851475143)))
 
    (test-group "divisors"
-     (test '(617 1 1234 2) (divisors 1234)))
+     (test '(2 1 1234 617) (divisors 1234))
+     (test '(20 10 5 60 30 15 4 2 1 12 6 3) (divisors 60)))
 
    (test-group "totient"
      (test 60 (totient 99))
-     (test 44 (totient 69))))
+     (test 44 (totient 69)))
+
+   (test-group "mobius"
+     (test '(1 -1 -1 0 -1 1 -1 0 0 1) (map mobius (iota 10 1)))))
 
  (test-group "fixnum"
    (test-group "fxsqrt"

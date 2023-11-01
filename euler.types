@@ -236,6 +236,12 @@
    (integer)
    integer))
 
+(euler#mobius
+  (#(procedure #:enforce)
+   euler#mobius
+   (integer)
+   integer))
+
 ;; ---
 ;; fixnum
 ;; ---

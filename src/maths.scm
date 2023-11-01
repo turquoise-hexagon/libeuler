@@ -167,52 +167,71 @@
         '(2 325 9375 28178 450775 9780504 1795265022)))))
 
 (define-inline (_factor n)
-  (let main ((n n) (c 1))
-    (let ((f (lambda (x) (modulo (+ (* x x) c) n))))
-      (let loop ((t 2) (h 2) (d 1))
-        (cond
-          ((= d 1)
-           (let* ((t (f t))
-                  (h (f h))
-                  (h (f h))
-                  (d (gcd (- t h) n)))
-             (loop t h d)))
-          ((= d n) (main n (+ c 1)))
-          ((_prime? d) d)
-          (else    (main d (+ c 1))))))))
+  (cond
+    ((< n 2) #f)
+    ((prime? n) n)
+    ((even? n) 2)
+    (else
+     (let main ((n n) (c 1))
+       (let ((f (lambda (x) (modulo (+ (* x x) c) n))))
+         (let loop ((t 2) (h 2) (d 1))
+           (cond
+             ((= d 1)
+              (let* ((t (f t))
+                     (h (f h))
+                     (h (f h))
+                     (d (gcd (- t h) n)))
+                (loop t h d)))
+             ((= d n) (main n (+ c 1)))
+             ((_prime? d) d)
+             (else    (main d (+ c 1))))))))))
 
 (define-inline (_factors n)
   (let loop ((n n) (acc '()))
-    (if (< n 2)
-      acc
-      (if (even? n)
-        (loop (quotient n 2) (cons 2 acc))
-        (let loop ((n n) (acc acc))
-          (if (_prime? n)
-            (cons n acc)
-            (let ((_ (_factor n)))
-              (loop (quotient n _) (cons _ acc)))))))))
+    (let ((_ (_factor n)))
+      (if _
+        (loop (quotient n _) (cons _ acc))
+        acc))))
 
 (define-inline (_divisors n)
-  (let loop ((l (_run-length (_factors n) =)))
-    (if (null? l)
+  (let loop ((n n))
+    (if (= n 1)
       '(1)
-      (let* ((_ (car l))
-             (a (car _))
-             (b (cdr _)))
-        (foldl
-          (lambda (acc t)
-            (do ((i 0 (+ i 1))
-                 (t t (* t b))
-                 (acc acc (cons t acc)))
-              ((> i a) acc)))
-          '() (loop (cdr l)))))))
+      (let ((a (_factor n)))
+        (let subloop ((n n) (b 0))
+          (if (zero? (modulo n a))
+            (subloop (quotient n a) (+ b 1))
+            (foldl
+              (lambda (acc t)
+                (do ((i 0 (+ i 1))
+                     (t t (* t a))
+                     (acc acc (cons t acc)))
+                  ((> i b) acc)))
+              '() (loop n))))))))
 
 (define-inline (_totient n)
-  (foldl
-    (lambda (acc i)
-      (- acc (quotient acc (cdr i))))
-    n (_run-length (_factors n) =)))
+  (let loop ((n n) (acc n))
+    (if (= n 1)
+      acc
+      (let ((_ (_factor n)))
+        (let subloop ((n n))
+          (if (zero? (modulo n _))
+            (subloop (quotient n _))
+            (loop n (- acc (quotient acc _)))))))))
+
+(define-inline (_mobius n)
+  (let loop ((n n) (a 0))
+    (if (= n 1)
+      (if (even? a)
+        +1
+        -1)
+      (let ((_ (_factor n)))
+        (let subloop ((n n) (b 0))
+          (if (zero? (modulo n _))
+            (subloop (quotient n _) (+ b 1))
+            (if (> b 1)
+              0
+              (loop n (+ a b)))))))))
 
 ;; ---
 ;; wrappers
@@ -287,3 +306,8 @@
   (##sys#check-integer    n 'totient)
   (check-positive-integer n 'totient)
   (_totient n))
+
+(define (mobius n)
+  (##sys#check-integer    n 'mobius)
+  (check-positive-integer n 'mobius)
+  (_mobius n))
