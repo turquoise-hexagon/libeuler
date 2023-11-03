@@ -221,7 +221,7 @@
             (loop n (- acc (quotient acc _)))))
         acc))))
 
-(define-inline (_mobius n)
+(define-inline (_moebius n)
   (if (zero? n)
     0
     (let loop ((n n) (a 0))
@@ -309,7 +309,7 @@
   (check-positive-integer n 'totient)
   (_totient n))
 
-(define (mobius n)
-  (##sys#check-integer    n 'mobius)
-  (check-positive-integer n 'mobius)
-  (_mobius n))
+(define (moebius n)
+  (##sys#check-integer    n 'moebius)
+  (check-positive-integer n 'moebius)
+  (_moebius n))

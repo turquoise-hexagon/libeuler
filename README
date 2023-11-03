@@ -42,7 +42,7 @@ libeuler
         * factors
         * divisors
         * totient
-        * mobius
+        * moebius
     fixnum
         * fxsqrt
         * fxexpt

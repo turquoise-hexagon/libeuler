@@ -162,8 +162,8 @@
      (test 60 (totient 99))
      (test 44 (totient 69)))
 
-   (test-group "mobius"
-     (test '(1 -1 -1 0 -1 1 -1 0 0 1) (map mobius (iota 10 1)))))
+   (test-group "moebius"
+     (test '(1 -1 -1 0 -1 1 -1 0 0 1) (map moebius (iota 10 1)))))
 
  (test-group "fixnum"
    (test-group "fxsqrt"

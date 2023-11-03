@@ -43,7 +43,7 @@
    factors
    divisors
    totient
-   mobius
+   moebius
 
    ;; fixnum
    fxsqrt

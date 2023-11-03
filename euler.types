@@ -236,9 +236,9 @@
    (integer)
    integer))
 
-(euler#mobius
+(euler#moebius
   (#(procedure #:enforce)
-   euler#mobius
+   euler#moebius
    (integer)
    integer))
 
