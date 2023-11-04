@@ -224,16 +224,13 @@
 (define-inline (_moebius n)
   (if (zero? n)
     0
-    (let loop ((n n) (a 0))
+    (let loop ((n n) (acc 1))
       (if (= n 1)
-        (if (even? a) +1 -1)
+        acc
         (let ((_ (_factor n)))
-          (let subloop ((n n) (b 0))
-            (if (zero? (modulo n _))
-              (subloop (quotient n _) (+ b 1))
-              (if (> b 1)
-                0
-                (loop n (+ a b))))))))))
+          (if (zero? (modulo n (* _ _)))
+            0
+            (loop (quotient n _) (* acc -1))))))))
 
 ;; ---
 ;; wrappers
