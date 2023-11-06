@@ -74,7 +74,7 @@
             nt (- t (* q nt))
             nr (- r (* q nr))))))))
 
-(define-inline (_solve-chinese a n)
+(define-inline (_chinese-remainder-theorem a n)
   (let ((p (apply * n)))
     (let loop ((la a) (ln n) (acc 0))
       (if (or (null? la)
@@ -258,10 +258,10 @@
   (##sys#check-integer b 'modular-inverse)
   (_modular-inverse a b))
 
-(define (solve-chinese a n)
-  (##sys#check-list a 'solve-chinese)
-  (##sys#check-list n 'solve-chinese)
-  (_solve-chinese a n))
+(define (chinese-remainder-theorem a n)
+  (##sys#check-list a 'chinese-remainder-theorem)
+  (##sys#check-list n 'chinese-remainder-theorem)
+  (_chinese-remainder-theorem a n))
 
 (define (modular-expt b e m)
   (##sys#check-integer    b 'modular-expt)

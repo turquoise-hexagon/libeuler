@@ -188,9 +188,9 @@
    (integer integer)
    integer))
 
-(euler#solve-chinese
+(euler#chinese-remainder-theorem
   (#(procedure #:enforce)
-   euler#solve-chinese
+   euler#chinese-remainder-theorem
    ((list-of integer) (list-of integer))
    integer))
 

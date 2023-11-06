@@ -35,7 +35,7 @@
    binomial
    fibonacci
    modular-inverse
-   solve-chinese
+   chinese-remainder-theorem
    modular-expt
    primes
    discrete-log
