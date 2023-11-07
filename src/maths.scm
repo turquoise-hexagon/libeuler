@@ -6,7 +6,7 @@
   #e1e6)
 
 (define-constant _primes-pi-limit
-  #e1e12)
+  #e1e10)
 
 (define _trial-division-prime?-primes
   #f)
