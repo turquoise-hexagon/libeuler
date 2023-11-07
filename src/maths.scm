@@ -1,17 +1,18 @@
 ;; ---
-;; constants
+;; globals
 ;; ---
 
-(define-constant _stored-primes
-  '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97
-    101 103 107 109 113 127 131 137 139 149 151 157 163 167 173 179 181 191
-    193 197 199 211 223 227 229 233 239 241 251 257 263 269 271 277 281 283
-    293 307 311 313 317 331 337 347 349 353 359 367 373 379 383 389 397 401
-    409 419 421 431 433 439 443 449 457 461 463 467 479 487 491 499 503 509
-    521 523 541 547 557 563 569 571 577 587 593 599 601 607 613 617 619 631
-    641 643 647 653 659 661 673 677 683 691 701 709 719 727 733 739 743 751
-    757 761 769 773 787 797 809 811 821 823 827 829 839 853 857 859 863 877
-    881 883 887 907 911 919 929 937 941 947 953 967 971 977 983 991 997))
+(define-constant _trial-division-prime?-limit
+  #e1e6)
+
+(define-constant _primes-pi-limit
+  #e1e12)
+
+(define _trial-division-prime?-primes
+  #f)
+
+(define _primes-pi-primes
+  #f)
 
 ;; ---
 ;; functions
@@ -113,6 +114,38 @@
           (else
            (loop (fx+ i 1) (fx+ t 2) l)))))))
 
+(define-inline (_id x a)
+  (fx+ (fx/ (fx* (fx+ x a) (fx+ (fx+ x a) 1)) 2) a))
+
+(define-inline (_phi x a)
+  (let loop ((a a) (r 0))
+    (if (or (fx= x 0)
+            (fx= a 0))
+      (fx+ x r)
+      (let* ((a (fx- a 1)) (r (fx- r (_phi-cached (fx/ x (vector-ref _primes-pi-primes a)) a))))
+        (loop a r)))))
+
+(define _phi-cached
+  (let ((c (make-hash-table)))
+    (lambda (x a)
+      (let ((i (_id x a)))
+        (if (hash-table-exists? c i)
+          (hash-table-ref c i)
+          (let ((r (_phi x a)))
+            (hash-table-set! c i r)
+            r))))))
+
+(define-inline (_primes-pi n)
+  (unless _primes-pi-primes
+    (set! _primes-pi-primes (list->vector (_primes (_fxsqrt _primes-pi-limit)))))
+  (when (fx> n _primes-pi-limit)
+    (error 'primes-pi "value exceeds limit" n))
+  (let loop ((n n))
+    (if (fx< n 2)
+      0
+      (let ((a (loop (_fxsqrt n))))
+        (fx+ (_phi-cached n a) (fx- a 1))))))
+
 (define-inline (_discrete-log b n m)
   (let ((l (inexact->exact (ceiling (sqrt m)))) (h (make-hash-table)))
     (let loop ((i 0) (t 1))
@@ -133,7 +166,9 @@
             (loop (+ i 1) (modulo (* t c) m))))))))
 
 (define-inline (_trial-division-prime? n)
-  (let loop ((l _stored-primes))
+  (unless _trial-division-prime?-primes
+    (set! _trial-division-prime?-primes (_primes (_fxsqrt _trial-division-prime?-limit))))
+  (let loop ((l _trial-division-prime?-primes))
     (if (null? l)
       #t
       (let ((_ (car l)))
@@ -159,7 +194,7 @@
 (define-inline (_prime? n)
   (if (< n 2)
     #f
-    (if (< n #e1e6)
+    (if (< n _trial-division-prime?-limit)
       (_trial-division-prime? n)
       (every
         (lambda (i)
@@ -276,6 +311,11 @@
   (##sys#check-fixnum    n 'primes)
   (check-positive-fixnum n 'primes)
   (_primes n))
+
+(define (primes-pi n)
+  (##sys#check-fixnum    n 'primes-pi)
+  (check-positive-fixnum n 'primes-pi)
+  (_primes-pi n))
 
 (define (discrete-log b n m)
   (##sys#check-integer    b 'discrete-log)
