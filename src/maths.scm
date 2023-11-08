@@ -117,7 +117,7 @@
       x
       (if (fx= a 1)
         (fx- x (fxshr x 1))
-        (let* ((a (fx- a 1)) (p (vector-ref ps a)))
+        (let* ((a (fx- a 1)) (p (##sys#slot ps a)))
           (if (fx> p x)
             1
             (fx- (loop x a) (loop (fx/ x p) a))))))))
@@ -127,7 +127,7 @@
     (error 'primes-pi "value exceeds maximum" n))
   (if (fx< n 2)
     0
-    (let* ((ps (list->vector (_primes (_fxsqrt n)))) (a (vector-length ps)))
+    (let* ((ps (list->vector (_primes (_fxsqrt n)))) (a (##sys#size ps)))
       (fx+ (_phi n a) (fx- a 1)))))
 
 (define-inline (_discrete-log b n m)
