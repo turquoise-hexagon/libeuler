@@ -5,9 +5,6 @@
 (define-constant _trial-division-prime?-limit
   #e1e6)
 
-(define-constant _primes-pi-limit
-  #e1e12)
-
 (define _trial-division-prime?-primes
   #f)
 
@@ -111,7 +108,7 @@
           (else
            (loop (fx+ i 1) (fx+ t 2) l)))))))
 
-(define-inline (_phi x a)
+(define-inline (_phi ps x a)
   (let loop ((x x) (a a))
     (if (fx= a 0)
       x
@@ -123,12 +120,10 @@
             (fx- (loop x a) (loop (fx/ x p) a))))))))
 
 (define-inline (_primes-pi n)
-  (when (fx> n _primes-pi-limit)
-    (error 'primes-pi "value exceeds maximum" n))
   (if (fx< n 2)
     0
     (let* ((ps (list->vector (_primes (_fxsqrt n)))) (a (##sys#size ps)))
-      (fx+ (_phi n a) (fx- a 1)))))
+      (fx+ (_phi ps n a) (fx- a 1)))))
 
 (define-inline (_discrete-log b n m)
   (let ((l (inexact->exact (ceiling (sqrt m)))) (h (make-hash-table)))
