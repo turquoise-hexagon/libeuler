@@ -6,12 +6,9 @@
   #e1e6)
 
 (define-constant _primes-pi-limit
-  #e1e10)
+  #e1e12)
 
 (define _trial-division-prime?-primes
-  #f)
-
-(define _primes-pi-primes
   #f)
 
 ;; ---
@@ -114,37 +111,24 @@
           (else
            (loop (fx+ i 1) (fx+ t 2) l)))))))
 
-(define-inline (_id x a)
-  (fx+ (fx/ (fx* (fx+ x a) (fx+ (fx+ x a) 1)) 2) a))
-
 (define-inline (_phi x a)
-  (let loop ((a a) (r 0))
-    (if (or (fx= x 0)
-            (fx= a 0))
-      (fx+ x r)
-      (let* ((a (fx- a 1)) (r (fx- r (_phi-cached (fx/ x (vector-ref _primes-pi-primes a)) a))))
-        (loop a r)))))
-
-(define _phi-cached
-  (let ((c (make-hash-table)))
-    (lambda (x a)
-      (let ((i (_id x a)))
-        (if (hash-table-exists? c i)
-          (hash-table-ref c i)
-          (let ((r (_phi x a)))
-            (hash-table-set! c i r)
-            r))))))
+  (let loop ((x x) (a a))
+    (if (fx= a 0)
+      x
+      (if (fx= a 1)
+        (fx- x (fxshr x 1))
+        (let* ((a (fx- a 1)) (p (vector-ref ps a)))
+          (if (fx> p x)
+            1
+            (fx- (loop x a) (loop (fx/ x p) a))))))))
 
 (define-inline (_primes-pi n)
-  (unless _primes-pi-primes
-    (set! _primes-pi-primes (list->vector (_primes (_fxsqrt _primes-pi-limit)))))
   (when (fx> n _primes-pi-limit)
-    (error 'primes-pi "value exceeds limit" n))
-  (let loop ((n n))
-    (if (fx< n 2)
-      0
-      (let ((a (loop (_fxsqrt n))))
-        (fx+ (_phi-cached n a) (fx- a 1))))))
+    (error 'primes-pi "value exceeds maximum" n))
+  (if (fx< n 2)
+    0
+    (let* ((ps (list->vector (_primes (_fxsqrt n)))) (a (vector-length ps)))
+      (fx+ (_phi n a) (fx- a 1)))))
 
 (define-inline (_discrete-log b n m)
   (let ((l (inexact->exact (ceiling (sqrt m)))) (h (make-hash-table)))
