@@ -9,6 +9,6 @@
  (components
    (extension euler
      (types-file (predefined))
-     (csc-options "-v" "-O4" "-cc" "clang" "-C" "-Ofast -march=native"))))
+     (csc-options "-v" "-O3" "-C" "-O3 -march=native"))))
 
  ; vim: ft=scheme
