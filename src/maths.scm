@@ -5,7 +5,13 @@
 (define-constant _trial-division-prime?-limit
   #e1e6)
 
+(define-constant _prime-pi-limit
+  #e5e6)
+
 (define _trial-division-prime?-primes
+  #f)
+
+(define _prime-pi-primes
   #f)
 
 ;; ---
@@ -108,22 +114,51 @@
           (else
            (loop (fx+ i 1) (fx+ t 2) l)))))))
 
-(define-inline (_phi ps x a)
-  (let loop ((x x) (a a))
-    (if (fx= a 0)
-      x
-      (if (fx= a 1)
-        (fx- x (fxshr x 1))
-        (let* ((a (fx- a 1)) (p (##sys#slot ps a)))
-          (if (fx> p x)
-            1
-            (fx- (loop x a) (loop (fx/ x p) a))))))))
+(define-inline (_pi n)
+  (if (fx< _prime-pi-limit n)
+    (main n)
+    (let loop ((l 1) (h (fx- (##sys#size _prime-pi-primes) 1)))
+      (let ((m (fx/ (fx+ l h) 2)))
+        (cond
+          ((fx< h l) m)
+          ((fx< n (##sys#slot _prime-pi-primes m)) (loop l (fx- m 1)))
+          ((fx< (##sys#slot _prime-pi-primes m) n) (loop (fx+ m 1) h))
+          (else m))))))
 
-(define-inline (_primes-pi n)
-  (if (fx< n 2)
-    0
-    (let* ((ps (list->vector (_primes (_fxsqrt n)))) (a (##sys#size ps)))
-      (fx+ (_phi ps n a) (fx- a 1)))))
+(define _phi
+  (let ((c (make-hash-table)))
+    (lambda (x a)
+      (let ((i (let ((_ (fx+ x a)))
+                 (fx+ (fx/ (fx* _ (fx+ _ 1)) 2) a))))
+        (if (hash-table-exists? c i)
+          (hash-table-ref c i)
+          (let ((r (if (fx= a 1)
+                     (fx/ (fx+ x 1) 2)
+                     (let ((_ (fx- a 1)))
+                       (fx- (_phi x _) (_phi (fx/ x (##sys#slot _prime-pi-primes a)) _))))))
+            (hash-table-set! c i r)
+            r))))))
+
+(define-inline (_prime-pi n)
+  (unless _prime-pi-primes
+    (set! _prime-pi-primes (list->vector (cons -1 (_primes _prime-pi-limit)))))
+  (let main ((n n))
+    (if (fx< n _prime-pi-limit)
+      (_pi n)
+      (let
+        ((a (_pi (fxnth-root n 4)))
+         (b (_pi (_fxsqrt n)))
+         (c (_pi (fxnth-root n 3))))
+        (let loop ((i (fx+ a 1)) (s (fx+ (_phi n a) (fx/ (fx* (fx- (fx+ b a) 2) (fx+ (fx- b a) 1)) 2))))
+          (if (fx< b i)
+            s
+            (let* ((t (fx/ n (##sys#slot _prime-pi-primes i))) (l (_pi (_fxsqrt t))) (s (fx- s (_pi t))))
+              (if (fx< c i)
+                (loop (fx+ i 1) s)
+                (let subloop ((j i) (s s))
+                  (if (fx< l j)
+                    (loop (fx+ i 1) s)
+                    (subloop (fx+ j 1) (fx+ (fx- s (_pi (fx/ t (##sys#slot _prime-pi-primes j)))) (fx- j 1)))))))))))))
 
 (define-inline (_discrete-log b n m)
   (let ((l (inexact->exact (ceiling (sqrt m)))) (h (make-hash-table)))
@@ -291,10 +326,10 @@
   (check-positive-fixnum n 'primes)
   (_primes n))
 
-(define (primes-pi n)
-  (##sys#check-fixnum    n 'primes-pi)
-  (check-positive-fixnum n 'primes-pi)
-  (_primes-pi n))
+(define (prime-pi n)
+  (##sys#check-fixnum    n 'prime-pi)
+  (check-positive-fixnum n 'prime-pi)
+  (_prime-pi n))
 
 (define (discrete-log b n m)
   (##sys#check-integer    b 'discrete-log)

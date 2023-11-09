@@ -38,7 +38,7 @@
    chinese-remainder-theorem
    modular-expt
    primes
-   primes-pi
+   prime-pi
    discrete-log
    prime?
    factors

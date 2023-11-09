@@ -143,8 +143,8 @@
    (test-group "primes"
      (test '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47) (primes 50)))
 
-   (test-group "primes-pi"
-     (test 9592 (primes-pi #e1e5)))
+   (test-group "prime-pi"
+     (test 9592 (prime-pi #e1e5)))
 
    (test-group "discrete-log"
      (test 1665442  (discrete-log 7 11239946 20201227))

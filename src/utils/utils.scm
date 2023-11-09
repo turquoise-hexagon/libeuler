@@ -43,7 +43,7 @@
   (foreign-lambda* void ((blob c) (size_t s) (bool v))
     "memset(c, v ? ~0 : 0, s * sizeof(*c));"))
 
-(define (make-bitset s v)
+(define-inline (make-bitset s v)
   (let* ((s (fx+ (fx/ s 8) 1)) (c (make-blob s)))
     (blob-init! c s v)
     c))
@@ -61,10 +61,23 @@
 ;; ---
 
 (define-inline (map/vector f v)
-  (let* ((l (vector-length v)) (t (make-vector l)))
+  (let* ((l (##sys#size v)) (t (make-vector l)))
     (let loop ((i 0))
       (if (fx= i l)
         t
         (begin
-          (vector-set! t i (f (vector-ref v i)))
+          (##sys#setslot t i (f (##sys#slot v i)))
           (loop (fx+ i 1)))))))
+
+(define-inline (fxnth-root n k)
+  (let loop ((h 1))
+    (if (fx< (_fxexpt h k) n)
+      (loop (fx* h 2))
+      (let loop ((l (fx/ h 2)) (h h))
+        (if (fx= (fx- h l) 1)
+          (if (fx= (_fxexpt h k) n) h l)
+          (let* ((m (fx/ (fx+ l h) 2)) (_ (_fxexpt m k)))
+            (cond
+              ((fx< _ n) (loop m h))
+              ((fx< n _) (loop l m))
+              (else m))))))))

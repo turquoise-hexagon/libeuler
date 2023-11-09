@@ -206,9 +206,9 @@
    (fixnum)
    (list-of fixnum)))
 
-(euler#primes-pi
+(euler#prime-pi
   (#(procedure #:enforce)
-   euler#primes-pi
+   euler#prime-pi
    (fixnum)
    fixnum))
 
