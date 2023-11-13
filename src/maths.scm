@@ -239,7 +239,11 @@
   (let loop ((n n) (acc '()))
     (let ((_ (_factor n)))
       (if _
-        (loop (quotient n _) (cons _ acc))
+        (do ((n (quotient n _)
+                (quotient n _))
+             (acc (cons _ acc)
+                  (cons _ acc)))
+          ((positive? (modulo n _)) (loop n acc)))
         acc))))
 
 (define-inline (_divisors n)
