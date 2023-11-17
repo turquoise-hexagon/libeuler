@@ -19,9 +19,9 @@
       (test '(1 0 0 1 1 0 1 0 0 1 0) (number->list 1234 2)))
 
     (test-group "integer-log"
-      (test 4 (integer-log 1234))
-      (test 5 (integer-log 12345))
-      (test 6 (integer-log 123456)))
+      (test 3 (integer-log 1234))
+      (test 4 (integer-log 12345))
+      (test 5 (integer-log 123456)))
 
     (test-group "palindrome?"
       (test #f (palindrome? 1234))
