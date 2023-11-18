@@ -21,21 +21,21 @@
     ((null? a) b)
     ((null? b) a)
     (else
-     (if (? (car b) (car a))
-       (cons (car b) (cons a (cdr b)))
-       (cons (car a) (cons b (cdr a)))))))
+     (if (? (##sys#slot b 0) (##sys#slot a 0))
+       (##sys#cons (##sys#slot b 0) (##sys#cons a (##sys#slot b 1)))
+       (##sys#cons (##sys#slot a 0) (##sys#cons b (##sys#slot a 1)))))))
 
 (define-inline (_priority-queue-merge-pairs ? a)
   (let main ((a a))
     (cond
       ((null? a)
        '())
-      ((null? (cdr a))
-       (car a))
+      ((null? (##sys#slot a 1))
+       (##sys#slot a 0))
       (else
        (_priority-queue-merge ?
-         (_priority-queue-merge ? (car a) (cadr a))
-         (main (cddr a)))))))
+         (_priority-queue-merge ? (##sys#slot a 0) (##sys#slot (##sys#slot a 1) 0))
+         (main (##sys#slot (##sys#slot a 1) 1)))))))
 
 (define-inline (_priority-queue-insert q i)
   (let ((? (##sys#slot q 1)) (a (##sys#slot q 2)))
@@ -44,31 +44,31 @@
 (define-inline (_priority-queue-first q)
   (if (_priority-queue-empty? q)
     (error 'priority-queue-first "empty priority queue" q)
-    (car (##sys#slot q 2))))
+    (##sys#slot (##sys#slot q 2) 0)))
 
 (define-inline (_priority-queue-rest q)
   (if (_priority-queue-empty? q)
     (error 'priority-queue-rest "empty priority queue" q)
     (let ((? (##sys#slot q 1)) (a (##sys#slot q 2)))
-      (##sys#make-structure 'euler#priority-queue ? (_priority-queue-merge-pairs ? (cdr a))))))
+      (##sys#make-structure 'euler#priority-queue ? (_priority-queue-merge-pairs ? (##sys#slot a 1))))))
 
 (define-inline (_list->priority-queue l ?)
   (let loop ((l l) (acc (_priority-queue ?)))
     (if (null? l)
       acc
-      (loop (cdr l) (_priority-queue-insert acc (car l))))))
+      (loop (##sys#slot l 1) (_priority-queue-insert acc (##sys#slot l 0))))))
 
 (define-inline (_priority-queue->list q)
   (let loop ((q q))
     (if (_priority-queue-empty? q)
       '()
-      (cons (_priority-queue-first q) (loop (_priority-queue-rest q))))))
+      (##sys#cons (_priority-queue-first q) (loop (_priority-queue-rest q))))))
 
 (define-inline (_priority-queue-map->list q p)
   (let loop ((q q))
     (if (_priority-queue-empty? q)
       '()
-      (cons (p (_priority-queue-first q)) (loop (_priority-queue-rest q))))))
+      (##sys#cons (p (_priority-queue-first q)) (loop (_priority-queue-rest q))))))
 
 (define-inline (_priority-queue-for-each q p)
   (let loop ((q q))
@@ -88,7 +88,7 @@
       '()
       (let ((_ (_priority-queue-first q)))
         (if (p _)
-          (cons _ (loop (_priority-queue-rest q)))
+          (##sys#cons _ (loop (_priority-queue-rest q)))
           (loop (_priority-queue-rest q)))))))
 
 (define-inline (_priority-queue-take q n)
