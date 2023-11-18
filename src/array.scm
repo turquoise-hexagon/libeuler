@@ -29,7 +29,7 @@
 (define-inline (_array-dimensions l)
   (let loop ((i l))
     (if (list? i)
-      (cons (length i) (loop (car i)))
+      (cons (length i) (loop (##sys#slot i 0)))
       '())))
 
 (define-inline (_list->array l)
@@ -63,21 +63,21 @@
       acc
       (if (null? d)
         (error 'array-ref "out of range" acc c)
-        (if (fxclosed? -1 (car c) (car d))
-          (loop (vector-ref acc (car c)) (cdr c) (cdr d))
+        (if (fxclosed? -1 (##sys#slot c 0) (##sys#slot d 0))
+          (loop (##sys#slot acc (##sys#slot c 0)) (##sys#slot c 1) (##sys#slot d 1))
           (error 'array-ref "out of range" acc c))))))
 
 (define-inline (_array-set! a c i)
   (let loop ((acc (##sys#slot a 1)) (c c) (d (##sys#slot a 3)))
-    (let ((c (car c)) (d (car d)) (tc (cdr c)) (td (cdr d)))
+    (let ((c (##sys#slot c 0)) (d (##sys#slot d 0)) (tc (##sys#slot c 1)) (td (##sys#slot d 1)))
       (if (null? tc)
         (if (vector? acc)
           (if (fxclosed? -1 c d)
-            (vector-set! acc c i)
+            (##sys#setslot acc c i)
             (error 'array-set! "out of range" acc c))
           (error 'array-set! "out of range" acc c))
         (if (fxclosed? -1 c d)
-          (loop (vector-ref acc c) tc td)
+          (loop (##sys#slot acc c) tc td)
           (error 'array-set! "out of range" acc c))))))
 
 (define-inline (_array-exists? a c)
@@ -86,8 +86,8 @@
       #t
       (if (null? d)
         #f
-        (if (fxclosed? -1 (car c) (car d))
-          (loop (cdr c) (cdr d))
+        (if (fxclosed? -1 (##sys#slot c 0) (##sys#slot d 0))
+          (loop (##sys#slot c 1) (##sys#slot d 1))
           #f)))))
 
 ;; ---
