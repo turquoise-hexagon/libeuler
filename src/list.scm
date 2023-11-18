@@ -22,10 +22,10 @@
   (let loop ((l l))
     (if (null? l)
       '()
-      (let ((a (car l)) (b (cdr l)))
+      (let ((a (##sys#slot l 0)) (b (##sys#slot l 1)))
         (if (? a i)
           b
-          (cons a (loop b)))))))
+          (##sys#cons a (loop b)))))))
 
 (define-inline (_range s e d)
   (let ((c (cond ((positive? d) <)
