@@ -22,8 +22,8 @@
     ((null? b) a)
     (else
      (if (? (##sys#slot b 0) (##sys#slot a 0))
-       (##sys#cons (##sys#slot b 0) (##sys#cons a (##sys#slot b 1)))
-       (##sys#cons (##sys#slot a 0) (##sys#cons b (##sys#slot a 1)))))))
+       (cons (##sys#slot b 0) (cons a (##sys#slot b 1)))
+       (cons (##sys#slot a 0) (cons b (##sys#slot a 1)))))))
 
 (define-inline (_priority-queue-merge-pairs ? a)
   (let main ((a a))
@@ -62,13 +62,13 @@
   (let loop ((q q))
     (if (_priority-queue-empty? q)
       '()
-      (##sys#cons (_priority-queue-first q) (loop (_priority-queue-rest q))))))
+      (cons (_priority-queue-first q) (loop (_priority-queue-rest q))))))
 
 (define-inline (_priority-queue-map->list q p)
   (let loop ((q q))
     (if (_priority-queue-empty? q)
       '()
-      (##sys#cons (p (_priority-queue-first q)) (loop (_priority-queue-rest q))))))
+      (cons (p (_priority-queue-first q)) (loop (_priority-queue-rest q))))))
 
 (define-inline (_priority-queue-for-each q p)
   (let loop ((q q))
@@ -88,7 +88,7 @@
       '()
       (let ((_ (_priority-queue-first q)))
         (if (p _)
-          (##sys#cons _ (loop (_priority-queue-rest q)))
+          (cons _ (loop (_priority-queue-rest q)))
           (loop (_priority-queue-rest q)))))))
 
 (define-inline (_priority-queue-take q n)
