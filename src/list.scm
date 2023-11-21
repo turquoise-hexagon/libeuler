@@ -8,15 +8,15 @@
       (error 'delete-at "out of range" l n)
       (if (fx= tn 0)
         (##sys#slot tl 1)
-        (##sys#cons (##sys#slot tl 0) (loop (##sys#slot tl 1) (fx- tn 1)))))))
+        (cons (##sys#slot tl 0) (loop (##sys#slot tl 1) (fx- tn 1)))))))
 
 (define-inline (_insert-at l n i)
   (let loop ((tl l) (tn n))
     (if (fx= tn 0)
-      (##sys#cons i tl)
+      (cons i tl)
       (if (null? tl)
         (error 'insert-at "out of range" l n)
-        (##sys#cons (##sys#slot tl 0) (loop (##sys#slot tl 1) (fx- tn 1)))))))
+        (cons (##sys#slot tl 0) (loop (##sys#slot tl 1) (fx- tn 1)))))))
 
 (define-inline (_delete-first l i ?)
   (let loop ((l l))
@@ -25,7 +25,7 @@
       (let ((a (##sys#slot l 0)) (b (##sys#slot l 1)))
         (if (? a i)
           b
-          (##sys#cons a (loop b)))))))
+          (cons a (loop b)))))))
 
 (define-inline (_range s e d)
   (let ((c (cond ((positive? d) <)
