@@ -185,11 +185,11 @@
   (let loop ((l _trial-division-prime?-primes))
     (if (null? l)
       #t
-      (let ((_ (car l)))
+      (let ((_ (##sys#slot l 0)))
         (cond
           ((fx> (fx*   _ _) n) #t)
           ((fx= (fxmod n _) 0) #f)
-          (else (loop (cdr l))))))))
+          (else (loop (##sys#slot l 1))))))))
 
 (define-inline (_witness? n a)
   (do ((d (- n 1) (quotient d 2))
