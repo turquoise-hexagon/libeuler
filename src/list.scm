@@ -49,13 +49,13 @@
               (cons (cons acc i) (loop l)))))))))
 
 (define-inline (_extremum l p ?)
-  (let loop ((l (cdr l)) (t (p (car l))) (acc (car l)))
+  (let loop ((l (##sys#slot l 1)) (t (p (##sys#slot l 0))) (acc (##sys#slot l 0)))
     (if (null? l)
       acc
-      (let* ((i (car l)) (n (p i)))
+      (let* ((i (##sys#slot l 0)) (n (p i)))
         (if (? n t)
-          (loop (cdr l) n i)
-          (loop (cdr l) t acc))))))
+          (loop (##sys#slot l 1) n i)
+          (loop (##sys#slot l 1) t acc))))))
 
 (define-inline (_product l)
   (define (f i j)
