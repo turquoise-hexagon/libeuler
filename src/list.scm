@@ -96,14 +96,14 @@
       (cond
         ((null? t)
          (list l))
-        ((eq? (cdr l) t)
+        ((eq? (##sys#slot l 1) t)
          (map list l))
         (else
          (foldr
            (lambda (a b)
-             (cons (cons (car l) a) b))
-           (loop (cdr l) (cdr t))
-           (loop (cdr l) t))))))))
+             (cons (cons (##sys#slot l 0) a) b))
+           (loop (##sys#slot l 1) (##sys#slot t 1))
+           (loop (##sys#slot l 1) t))))))))
 
 (define-inline (_permutations l)
   (let f ((j '()) (k (reverse l)) (l '()))
