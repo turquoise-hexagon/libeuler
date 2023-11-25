@@ -86,7 +86,16 @@
             -1
             (loop (cdr la) (cdr ln) (+ acc (* a m i)))))))))
 
-(define-inline (_modular-expt b e m)
+(define-inline (_modular-expt/fixnum b e m)
+  (let loop ((b b) (e e) (acc 1))
+    (if (fx= e 0)
+      acc
+      (loop (fxmod (fx* (fxmod b m) (fxmod b m)) m) (fx/ e 2)
+        (if (fxodd? e)
+          (fxmod (fx* (fxmod b m) (fxmod acc m)) m)
+          acc)))))
+
+(define-inline (_modular-expt/bignum b e m)
   (let loop ((b b) (e e) (acc 1))
     (if (zero? e)
       acc
@@ -166,14 +175,14 @@
       (unless (= i l)
         (hash-table-set! h t i)
         (loop (+ i 1) (modulo (* t b) m))))
-    (let ((c (_modular-expt (_modular-expt b (- m 2) m) l m)))
+    (let ((c (_modular-expt/bignum (_modular-expt/bignum b (- m 2) m) l m)))
       (let loop ((i 0) (t n))
         (if (= i l)
           -1
           (if (hash-table-exists? h t)
             (let ((_ (+ (hash-table-ref h t) (* i l))))
               (if (positive? _)
-                (if (= (_modular-expt b _ m) n)
+                (if (= (_modular-expt/bignum b _ m) n)
                   _
                   -1)
                 (loop (+ i 1) (modulo (* t c) m))))
@@ -195,12 +204,12 @@
   (do ((d (- n 1) (quotient d 2))
        (s 0 (+ s 1)))
       ((odd? d)
-       (let ((t (_modular-expt a d n)))
+       (let ((t (_modular-expt/bignum a d n)))
          (if (or (= t 1)
                  (= t (- n 1)))
            #t
            (do ((s s (- s 1))
-                (t t (_modular-expt t 2 n)))
+                (t t (_modular-expt/bignum t 2 n)))
              ((or (zero? s)
                   (= t (- n 1)))
               (positive? s))))))))
@@ -323,7 +332,12 @@
   (check-positive-integer b 'modular-expt)
   (check-positive-integer e 'modular-expt)
   (check-positive-integer m 'modular-expt)
-  (_modular-expt b e m))
+  ((if (and (fixnum? b)
+            (fixnum? e)
+            (fx*? m m))
+     _modular-expt/fixnum
+     _modular-expt/bignum)
+   b e m))
 
 (define (primes n)
   (##sys#check-fixnum    n 'primes)
