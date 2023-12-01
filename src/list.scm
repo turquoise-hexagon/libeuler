@@ -28,13 +28,13 @@
           (cons a (loop b)))))))
 
 (define-inline (_range s e d)
-  (let ((c (cond ((positive? d) <)
-                 ((negative? d) >)
+  (let ((? (cond ((positive? d) >)
+                 ((negative? d) <)
                  (else =))))
-    (let loop ((i e) (acc '()))
-      (if (c i s)
-        acc
-        (loop (- i d) (cons i acc))))))
+    (let loop ((i s) (acc '()))
+      (if (? i e)
+        (reverse acc)
+        (loop (+ i d) (cons i acc))))))
 
 (define-inline (_run-length l ?)
   (let loop ((l l))
