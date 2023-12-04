@@ -219,10 +219,10 @@
     #f
     (if (< n _trial-division-prime?-limit)
       (_trial-division-prime? n)
-      (every
-        (lambda (i)
-          (_witness? n i))
-        '(2 325 9375 28178 450775 9780504 1795265022)))))
+      ((list-of?
+         (lambda (i)
+           (_witness? n i)))
+       '(2 325 9375 28178 450775 9780504 1795265022)))))
 
 (define-inline (_factor n)
   (cond
