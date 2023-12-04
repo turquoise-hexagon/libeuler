@@ -20,18 +20,18 @@
   (let loop ((i l))
     (if (list? i)
       (if (pair? i)
-        (if (every list? i)
-          (let ((l (length (car i))))
-            (if (every
-                  (lambda (_)
-                    (fx= (length _) l))
-                  (cdr i))
-              (every loop i)
+        (if ((list-of? list?) i)
+          (let ((l (length (##sys#slot i 0))))
+            (if ((list-of?
+                   (lambda (_)
+                     (fx= (length _) l)))
+                 (##sys#slot i 1))
+              ((list-of? loop) i)
               #f))
-          (every
-            (lambda (_)
-              (not (list? _)))
-            i))
+          ((list-of?
+             (lambda (_)
+               (not (list? _))))
+           i))
         #f)
       #t)))
 

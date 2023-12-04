@@ -76,7 +76,6 @@
     (chicken foreign)
 
     (only (srfi 1)
-      every
       xcons)
 
     (only (srfi 69)
