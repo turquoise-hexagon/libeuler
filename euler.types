@@ -59,11 +59,6 @@
    euler#range
    (integer #!optional integer #!optional integer)
    (list-of integer)))
-; (euler#range
-;   (#(procedure #:enforce)
-;    euler#range
-;    (integer integer #!optional integer)
-;    (list-of integer)))
 
 (euler#run-length
   (#(procedure #:enforce)

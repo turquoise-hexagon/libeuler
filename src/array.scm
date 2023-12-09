@@ -21,9 +21,7 @@
   (apply product
     (map
       (lambda (i)
-        (if (fx= i 1)
-          '(0)
-          (range 0 (fx- i 1))))
+        (_range 0 (fx- i 1) 1))
       l)))
 
 (define-inline (_array-dimensions l)
