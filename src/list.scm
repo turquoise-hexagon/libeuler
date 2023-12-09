@@ -135,11 +135,20 @@
   (##sys#check-closure ? 'delete-first)
   (_delete-first l i ?))
 
-(define (range s e #!optional (d (signum (- e s))))
-  (##sys#check-integer s 'range)
-  (##sys#check-integer e 'range)
-  (##sys#check-integer d 'range)
-  (_range s e d))
+(define range
+  (case-lambda
+    ((e)
+     (##sys#check-integer e 'range)
+     (_range 0 e (signum e)))
+    ((s e)
+     (##sys#check-integer s 'range)
+     (##sys#check-integer e 'range)
+     (_range s e (signum (- e s))))
+    ((s e d)
+     (##sys#check-integer s 'range)
+     (##sys#check-integer e 'range)
+     (##sys#check-integer d 'range)
+     (_range s e d))))
 
 (define (run-length l #!optional (? =))
   (##sys#check-list    l 'run-length)
