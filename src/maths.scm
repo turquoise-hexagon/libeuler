@@ -32,17 +32,14 @@
   (let main ((n n) (k k))
     (let ((_ (- n k)))
       (cond
-        ((negative? k) 0)
-        ((zero? k) 1)
-        ((negative? _) 0)
-        ((zero? _) 1)
+        ((negative? k) 0) ((zero? k) 1)
+        ((negative? _) 0) ((zero? _) 1)
         ((> (+ k k) n)
          (main n _))
         (else
-         (let loop ((i 2) (acc (+ _ 1)))
-           (if (> i k)
-             acc
-             (loop (+ i 1) (quotient (* acc (+ _ i)) i)))))))))
+         (do ((i 2 (+ i 1))
+              (acc (+ _ 1) (quotient (* acc (+ _ i)) i)))
+           ((> i k) acc)))))))
 
 (define-inline (_fibonacci n)
   (define (helper a b)
