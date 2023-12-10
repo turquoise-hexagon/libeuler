@@ -124,6 +124,12 @@
    ((struct euler#array))
    (list-of integer)))
 
+(euler#make-array
+  (#(procedure #:enforce)
+   euler#make-array
+   ((list-of integer) *)
+   (struct euler#array)))
+
 (euler#list->array
   (#(procedure #:enforce)
    euler#list->array

@@ -11,30 +11,48 @@
 ;; functions
 ;; ---
 
-(define-inline (_array-content l)
+(define-inline (_list->content l)
   (let loop ((i l))
     (if (list? i)
       (list->vector (map loop i))
       i)))
 
-(define-inline (_array-indexes l)
+(define-inline (_dimensions->indexes l)
   (apply product
     (map
       (lambda (i)
         (_range 0 (fx- i 1) 1))
       l)))
 
-(define-inline (_array-dimensions l)
+(define-inline (_list->dimensions l)
   (let loop ((i l))
     (if (list? i)
       (cons (length i) (loop (##sys#slot i 0)))
       '())))
 
+(define-inline (_dimensions->content d v)
+  (let loop ((i d))
+    (if (null? i)
+      v
+      (let ((h (car i)) (t (cdr i)))
+        (unless (positive? h)
+          (error 'make-array "bad array dimension - not a positive integer" h))
+        (map/vector
+          (lambda (_)
+            (loop t))
+          (make-vector h))))))
+
+(define-inline (_make-array d v)
+  (let*
+    ((c (_dimensions->content d v))
+     (i (_dimensions->indexes d)))
+    (##sys#make-structure 'euler#array c i d)))
+
 (define-inline (_list->array l)
   (let*
-    ((c (_array-content    l))
-     (d (_array-dimensions l))
-     (i (_array-indexes    d)))
+    ((c (_list->content    l))
+     (d (_list->dimensions l))
+     (i (_dimensions->indexes d)))
     (##sys#make-structure 'euler#array c i d)))
 
 (define-inline (_array->list a)
@@ -100,6 +118,10 @@
 ;; ---
 ;; wrappers
 ;; ---
+
+(define (make-array d v)
+  (##sys#check-pair d 'make-array)
+  (_make-array d v))
 
 (define (list->array l)
   (unless (well-formed-list? l)

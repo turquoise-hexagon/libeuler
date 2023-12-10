@@ -23,6 +23,7 @@
    array?
    array-indexes
    array-dimensions
+   make-array
    list->array
    array->list
    array-copy

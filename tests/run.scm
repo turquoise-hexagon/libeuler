@@ -86,6 +86,9 @@
      (test-group "array?/list->array"
        (test #t (array? (list->array test-lst))))
 
+     (test-group "make-array"
+       (test #t (array? (make-array '(2 3) 0))))
+
      (let ((test-array (list->array test-lst)))
        (test-group "array-indexes"
          (test '((0 0) (0 1) (0 2) (1 0) (1 1) (1 2)) (array-indexes test-array)))
