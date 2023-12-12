@@ -97,7 +97,7 @@
         (error 'array-set! "out of range" acc c)))))
 
 (define-inline (_array-exists? a c)
-  (let loop ((c c) (d (array-dimensions a)))
+  (let loop ((c c) (d (##sys#slot a 3)))
     (if (null? c)
       #t
       (if (null? d)
