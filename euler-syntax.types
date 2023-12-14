@@ -1,0 +1,7 @@
+(euler-syntax#memoize
+  (#(procedure #:enforce)
+   euler-syntax#memoize
+   (procedure)
+   procedure))
+
+; vim: ft=scheme

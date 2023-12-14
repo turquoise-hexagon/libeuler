@@ -85,11 +85,11 @@
       hash-table-set!
       make-hash-table))
 
-  (include "src/utils/utils.scm")
+  (include-relative "src/utils/utils.scm")
 
-  (include "src/digits.scm")
-  (include "src/fixnum.scm")
-  (include "src/list.scm")
-  (include "src/array.scm") ;; depends on `range`
-  (include "src/maths.scm")
-  (include "src/queue.scm"))
+  (include-relative "src/digits.scm")
+  (include-relative "src/fixnum.scm")
+  (include-relative "src/list.scm")
+  (include-relative "src/array.scm") ;; depends on `range`
+  (include-relative "src/maths.scm")
+  (include-relative "src/queue.scm"))

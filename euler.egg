@@ -6,9 +6,13 @@
  (dependencies
    srfi-1
    srfi-69)
+ (component-options
+   (csc-options "-v" "-O3" "-C" "-O3 -march=native"))
  (components
    (extension euler
-     (types-file (predefined))
-     (csc-options "-v" "-O3" "-C" "-O3 -march=native"))))
-
+     (source "euler/euler.scm")
+     (types-file (predefined)))
+   (extension euler-syntax
+     (source "euler-syntax/euler-syntax.scm")
+     (types-file (predefined)))))
  ; vim: ft=scheme
