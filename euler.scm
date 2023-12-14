@@ -90,6 +90,6 @@
   (include "src/digits.scm")
   (include "src/fixnum.scm")
   (include "src/list.scm")
-  (include "src/array.scm")
+  (include "src/array.scm") ;; depends on `range`
   (include "src/maths.scm")
   (include "src/queue.scm"))
