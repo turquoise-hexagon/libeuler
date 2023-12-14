@@ -1,8 +1,9 @@
 (import
   (chicken sort)
   (euler)
-  (test)
-  (srfi 1))
+  (euler-syntax)
+  (srfi 1)
+  (test))
 
 (test-group "euler"
   (test-group "digits"
@@ -215,6 +216,11 @@
         (test (take test-lst-sorted 5) (priority-queue->list (priority-queue-take test-queue 5))))
 
       (test-group "priority-queue-drop"
-        (test (drop test-lst-sorted 5) (priority-queue->list (priority-queue-drop test-queue 5)))))))
+        (test (drop test-lst-sorted 5) (priority-queue->list (priority-queue-drop test-queue 5))))))
+
+ (test-group "memoize"
+   (define-memoized (fib n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
+
+   (test 832040 (fib 30))))
 
 (test-exit)
