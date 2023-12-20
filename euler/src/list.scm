@@ -156,7 +156,7 @@
   (_run-length l ?))
 
 (define (extremum l #!optional (p identity) (? <))
-  (##sys#check-pair    l 'extremum)
+  (##sys#check-list    l 'extremum)
   (##sys#check-closure p 'extremum)
   (##sys#check-closure ? 'extremum)
   (_extremum l p ?))

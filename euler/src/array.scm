@@ -120,7 +120,8 @@
 ;; ---
 
 (define (make-array d v)
-  (##sys#check-pair d 'make-array)
+  (##sys#check-list d 'make-array)
+  (when (null? d) (error 'make-array "not a valid dimensions list" d))
   (_make-array d v))
 
 (define (list->array l)
@@ -143,7 +144,8 @@
 
 (define (array-set! a c i)
   (##sys#check-structure a 'euler#array 'array-set!)
-  (##sys#check-pair c 'array-set!)
+  (##sys#check-list c 'array-set!)
+  (when (null? c) (error 'array-set! "not a valid indexes list" c))
   (_array-set! a c i))
 
 (define (array-exists? a c)

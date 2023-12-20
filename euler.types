@@ -39,14 +39,14 @@
 (euler#delete-at
   (#(procedure #:enforce)
    euler#delete-at
-   (pair fixnum)
+   (list fixnum)
    list))
 
 (euler#insert-at
   (#(procedure #:enforce)
    euler#insert-at
    (list fixnum *)
-   pair))
+   list))
 
 (euler#delete-first
   (#(procedure #:enforce)
@@ -69,7 +69,7 @@
 (euler#extremum
   (#(procedure #:enforce)
    euler#extremum
-   (pair #!optional procedure procedure)
+   (list #!optional procedure procedure)
    *))
 
 (euler#product
