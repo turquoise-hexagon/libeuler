@@ -17,23 +17,26 @@
        (fx< b c)))
 
 (define-inline (well-formed-list? l)
-  (let loop ((i l))
-    (if (list? i)
-      (if (pair? i)
-        (if ((list-of? list?) i)
-          (let ((l (length (##sys#slot i 0))))
-            (if ((list-of?
-                   (lambda (_)
-                     (fx= (length _) l)))
-                 (##sys#slot i 1))
-              ((list-of? loop) i)
-              #f))
-          ((list-of?
-             (lambda (_)
-               (not (list? _))))
-           i))
-        #f)
-      #t)))
+  (if (and (list? l) (not (null? l)))
+    (let loop ((i l))
+      (if (list? i)
+        (let ((_ (length i)))
+          (if (= _ 0)
+            #f
+            (if ((list-of? list?) i)
+              (let ((_ (length (##sys#slot i 0))))
+                (if ((list-of?
+                       (lambda (i)
+                         (= _ (length i))))
+                     (##sys#slot i 1))
+                  ((list-of? loop) i)
+                  #f))
+              ((list-of?
+                 (lambda (i)
+                   (not (list? i))))
+               i))))
+        #t))
+    #f))
 
 ;; ---
 ;; data types
