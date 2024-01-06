@@ -159,6 +159,7 @@
   (##sys#check-list    l 'extremum)
   (##sys#check-closure p 'extremum)
   (##sys#check-closure ? 'extremum)
+  (when (null? l) (error 'extremum "bad argument type" l))
   (_extremum l p ?))
 
 (define (product . l)

@@ -36,7 +36,7 @@
       v
       (let ((h (car i)) (t (cdr i)))
         (unless (positive? h)
-          (error 'make-array "bad array dimension - not a positive integer" h))
+          (error 'make-array "size is negative" h))
         (map/vector
           (lambda (_)
             (loop t))
@@ -121,12 +121,12 @@
 
 (define (make-array d v)
   (##sys#check-list d 'make-array)
-  (when (null? d) (error 'make-array "not a valid dimensions list" d))
+  (when (null? d) (error 'make-array "bad argument type" d))
   (_make-array d v))
 
 (define (list->array l)
   (unless (well-formed-list? l)
-    (error 'list->array "malformed array list" l))
+    (error 'list->array "bad argument type" l))
   (_list->array l))
 
 (define (array->list a)
@@ -145,7 +145,7 @@
 (define (array-set! a c i)
   (##sys#check-structure a 'euler#array 'array-set!)
   (##sys#check-list c 'array-set!)
-  (when (null? c) (error 'array-set! "not a valid indexes list" c))
+  (when (null? c) (error 'array-set! "bad argument type" c))
   (_array-set! a c i))
 
 (define (array-exists? a c)

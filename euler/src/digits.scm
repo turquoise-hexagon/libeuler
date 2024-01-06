@@ -7,9 +7,9 @@
     (if (null? l)
       acc
       (let ((i (car l)))
-        (unless (< -1 i b)
-          (error 'list->number "invalid value" i))
-        (loop (cdr l) (+ (* acc b) i))))))
+        (if (< -1 i b)
+          (loop (cdr l) (+ (* acc b) i))
+          -1)))))
 
 (define-inline (_number->list/fixnum n b)
   (let loop ((n n) (acc '()))
