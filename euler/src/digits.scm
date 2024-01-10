@@ -12,16 +12,20 @@
           -1)))))
 
 (define-inline (_number->list/fixnum n b)
-  (let loop ((n n) (acc '()))
-    (if (fx= n 0)
-      acc
-      (loop (fx/ n b) (cons (fxmod n b) acc)))))
+  (if (fx= n 0)
+    '(0)
+    (let loop ((n n) (acc '()))
+      (if (fx= n 0)
+        acc
+        (loop (fx/ n b) (cons (fxmod n b) acc))))))
 
 (define-inline (_number->list/bignum n b)
-  (let loop ((n n) (acc '()))
-    (if (zero? n)
-      acc
-      (loop (quotient n b) (cons (modulo n b) acc)))))
+  (if (zero? n)
+    '(0)
+    (let loop ((n n) (acc '()))
+      (if (zero? n)
+        acc
+        (loop (quotient n b) (cons (modulo n b) acc))))))
 
 (define-inline (_digitsum/fixnum n b)
   (let loop ((n n) (acc 0))
