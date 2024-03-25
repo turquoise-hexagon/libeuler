@@ -216,7 +216,10 @@
         (test (take test-lst-sorted 5) (priority-queue->list (priority-queue-take test-queue 5))))
 
       (test-group "priority-queue-drop"
-        (test (drop test-lst-sorted 5) (priority-queue->list (priority-queue-drop test-queue 5))))))
+        (test (drop test-lst-sorted 5) (priority-queue->list (priority-queue-drop test-queue 5))))
+
+      (test-group "priority-queue-length"
+        (test 10 (priority-queue-length test-queue)))))
 
  (test-group "memoize"
    (define-memoized (fib n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))

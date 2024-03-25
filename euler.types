@@ -370,4 +370,10 @@
    ((struct euler#priority-queue) fixnum)
    (struct euler#priority-queue)))
 
+(euler#priority-queue-length
+  (#(procedure #:enforce)
+   euler#priority-queue-length
+   ((struct euler#priority-queue))
+   fixnum))
+
 ; vim: ft=scheme

@@ -108,6 +108,12 @@
         q
         (loop (_priority-queue-rest q) (fx- n 1))))))
 
+(define-inline (_priority-queue-length q)
+  (let loop ((q q) (acc 0))
+    (if (_priority-queue-empty? q)
+      acc
+      (loop (_priority-queue-rest q) (fx+ acc 1)))))
+
 ;; ---
 ;; others
 ;; ---
@@ -181,3 +187,7 @@
   (##sys#check-fixnum    n 'priority-queue-drop)
   (check-positive-fixnum n 'priority-queue-drop)
   (_priority-queue-drop q n))
+
+(define (priority-queue-length q)
+  (##sys#check-structure q 'euler#priority-queue 'priority-queue-length)
+  (_priority-queue-length q))

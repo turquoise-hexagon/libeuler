@@ -65,6 +65,7 @@ libeuler
         * priority-queue-filter->list
         * priority-queue-take
         * priority-queue-drop
+        * priority-queue-length
     memoize
         * memoize
         * define-memoized

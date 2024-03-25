@@ -67,7 +67,8 @@
    priority-queue-fold
    priority-queue-filter->list
    priority-queue-take
-   priority-queue-drop)
+   priority-queue-drop
+   priority-queue-length)
 
   (import
     (scheme)
