@@ -1,5 +1,6 @@
 (module euler-syntax
-  (memoize
+  (bind
+   memoize
    define-memoized)
 
   (import
@@ -12,4 +13,5 @@
       hash-table-set!
       make-hash-table))
 
+  (include-relative "src/bind.scm")
   (include-relative "src/memoize.scm"))
