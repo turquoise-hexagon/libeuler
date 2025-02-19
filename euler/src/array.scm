@@ -34,7 +34,8 @@
   (let loop ((i d))
     (if (null? i)
       v
-      (let ((h (car i)) (t (cdr i)))
+      (let ((h (##sys#slot i 0))
+            (t (##sys#slot i 1)))
         (unless (positive? h)
           (error 'make-array "size is negative" h))
         (map/vector

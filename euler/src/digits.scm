@@ -6,9 +6,9 @@
   (let loop ((l l) (acc 0))
     (if (null? l)
       acc
-      (let ((i (car l)))
+      (let ((i (##sys#slot l 0)))
         (if (< -1 i b)
-          (loop (cdr l) (+ (* acc b) i))
+          (loop (##sys#slot l 1) (+ (* acc b) i))
           -1)))))
 
 (define-inline (_number->list/fixnum n b)

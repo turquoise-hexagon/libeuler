@@ -78,10 +78,15 @@
       (if (or (null? la)
               (null? ln))
         (modulo acc p)
-        (let* ((a (car la)) (n (car ln)) (i (quotient p n)) (m (_modular-inverse i n)))
+        (let* ((a (##sys#slot la 0))
+               (n (##sys#slot ln 0))
+               (i (quotient p n)) (m (_modular-inverse i n)))
           (if (= m -1)
             -1
-            (loop (cdr la) (cdr ln) (+ acc (* a m i)))))))))
+            (loop
+              (##sys#slot la 1)
+              (##sys#slot ln 1)
+              (+ acc (* a m i)))))))))
 
 (define-inline (_modular-expt/fixnum b e m)
   (let loop ((b b) (e e) (acc 1))

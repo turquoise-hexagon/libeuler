@@ -76,12 +76,12 @@
   (let loop ((l l))
     (if (null? l)
       '(())
-      (let ((i (loop (cdr l))))
+      (let ((i (loop (##sys#slot l 1))))
         (join
           (list
             (map
               (lambda (_)
-                (cons (car l) _))
+                (cons (##sys#slot l 0) _))
               i)
             i))))))
 
