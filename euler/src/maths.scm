@@ -162,16 +162,16 @@
                     (loop (fx+ i 1) s)
                     (subloop (fx+ j 1) (fx+ (fx- s (_pi (fx/ t (##sys#slot _prime-pi-primes j)))) (fx- j 1)))))))))))))
 
-(define-inline (_discrete-log b e m)
+(define-inline (_discrete-log b n m)
   (let ((l (inexact->exact (ceiling (sqrt m)))) (h (make-hash-table)))
     (do ((i 0 (+ i 1)) (t 1 (modulo (* t b) m))) ((= i l))
       (hash-table-set! h t i))
     (let ((v (_modular-expt (_modular-inverse b m) l m)))
-      (let loop ((i 0) (t e))
+      (let loop ((i 0) (t n))
         (if (= i l) -1
           (if (hash-table-exists? h t)
             (let ((r (+ (hash-table-ref h t) (* i l))))
-              (if (= (modular-expt b r m) e) r -1))
+              (if (and (positive? r) (= (modular-expt b r m) n)) r -1))
             (loop (+ i 1) (modulo (* t v) m))))))))
 
 (define-inline (_trial-division-prime? n)
@@ -328,14 +328,14 @@
   (check-positive-fixnum n 'prime-pi)
   (_prime-pi n))
 
-(define (discrete-log b e m)
+(define (discrete-log b n m)
   (##sys#check-integer    b 'discrete-log)
-  (##sys#check-integer    e 'discrete-log)
+  (##sys#check-integer    n 'discrete-log)
   (##sys#check-integer    m 'discrete-log)
   (check-positive-integer b 'discrete-log)
-  (check-positive-integer e 'discrete-log)
+  (check-positive-integer n 'discrete-log)
   (check-positive-integer m 'discrete-log)
-  (_discrete-log b e m))
+  (_discrete-log b n m))
 
 (define (prime? n)
   (##sys#check-integer    n 'prime?)
