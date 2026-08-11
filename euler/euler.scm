@@ -73,9 +73,10 @@
   (import
     (scheme)
     (chicken base)
-    (chicken blob)
+    (chicken bytevector)
     (chicken fixnum)
     (chicken foreign)
+    (scheme case-lambda)
 
     (only (srfi 1)
       xcons)

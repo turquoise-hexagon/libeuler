@@ -47,7 +47,7 @@
     "memset(c, v ? ~0 : 0, s * sizeof(*c));"))
 
 (define-inline (make-bitset s v)
-  (let* ((s (fx+ (fx/ s 8) 1)) (c (make-blob s)))
+  (let* ((s (fx+ (fx/ s 8) 1)) (c (make-bytevector s)))
     (blob-init! c s v)
     c))
 

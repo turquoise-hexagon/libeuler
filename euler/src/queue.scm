@@ -118,10 +118,11 @@
 ;; others
 ;; ---
 
-(define-record-printer (priority-queue q p)
-  (let ((_ (_priority-queue->list q)))
-    (##sys#print "@" #f p)
-    (##sys#print  _  #f p)))
+(set-record-printer! priority-queue
+  (lambda (q p)
+    (let ((_ (_priority-queue->list q)))
+      (##sys#print "@" #f p)
+      (##sys#print  _  #f p))))
 
 ;; ---
 ;; wrappers
