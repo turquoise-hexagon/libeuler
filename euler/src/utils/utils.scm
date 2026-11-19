@@ -63,6 +63,9 @@
 ;; helpers
 ;; ---
 
+(define-inline (_modulo n m)
+  (if (< n m) n (modulo n m)))
+
 (define-inline (map/vector f v)
   (let* ((l (##sys#size v)) (t (make-vector l)))
     (let loop ((i 0))

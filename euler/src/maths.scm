@@ -2,14 +2,8 @@
 ;; globals
 ;; ---
 
-(define-constant _trial-division-prime?-limit
-  #e1e6)
-
 (define-constant _prime-pi-limit
   #e5e6)
-
-(define _trial-division-prime?-primes
-  #f)
 
 (define _prime-pi-primes
   #f)
@@ -19,14 +13,16 @@
 ;; ---
 
 (define-inline (_factorial n)
-  (if (zero? n)
+  (if (< n 2)
     1
     (let loop ((i 1) (acc n))
-      (if (> acc i)
+      (if (<= acc i)
+        acc
         (let ((_ (+ i i)))
-          (* (loop _ acc)
-             (loop _ (- acc i))))
-        acc))))
+          (if (<= acc _)
+            (* acc (- acc i))
+            (* (loop _ acc)
+               (loop _ (- acc i)))))))))
 
 (define-inline (_binomial n k)
   (let main ((n n) (k k))
@@ -89,32 +85,37 @@
               (+ acc (* a m i)))))))))
 
 (define-inline (_modular-expt b e m)
-  (let loop ((b b) (e e) (acc 1))
-    (if (zero? e)
-      acc
-      (loop (modulo (* b b) m) (quotient e 2)
-        (if (odd? e)
-          (modulo (* b acc) m)
-          acc)))))
+  (let loop ((b (modulo b m)) (e e) (acc 1))
+    (cond
+      ((zero? e) acc)
+      ((even? e)
+       (loop (_modulo (* b b) m) (arithmetic-shift e -1) acc))
+      (else
+       (let ((acc (_modulo (* b acc) m)))
+         (if (= e 1) acc
+           (loop (_modulo (* b b) m) (arithmetic-shift e -1) acc)))))))
 
 (define-inline (_primes n)
-  (if (fx< n 2) '()
-    (let* ((lim (fx/ (fx- n 1) 2)) (sieve (make-bitset lim #t)))
-      (let loop ((i 0) (t 3) (l '(2)))
-        (cond
-          ((fx< n (fx* t t))
-           (do ((i i (fx+ i 1))
-                (t t (fx+ t 2))
-                (l l (if (bitset-ref sieve i)
-                       (cons t l)
-                       l)))
-             ((fx= i lim) (reverse l))))
-          ((bitset-ref sieve i)
-           (do ((x (fx+ 3 (fx+ (fx* 2 (fx* i i)) (fx* 6 i))) (fx+ x t)))
-             ((fx<= lim x) (loop (fx+ i 1) (fx+ t 2) (cons t l)))
-             (bitset-set! sieve x #f)))
-          (else
-           (loop (fx+ i 1) (fx+ t 2) l)))))))
+  (if (fx< n 2)
+    '()
+    (let* ((lim (fx/ (fx- n 1) 2)) (mem (make-bitset lim #t)))
+      (let sieve ((i 0) (t 3) (s 3) (ds 8) (l '(2)))
+        (if (fx< s lim)
+          (if (bitset-ref mem i)
+            (begin
+              (let clear ((x s))
+                (when (fx< x lim)
+                  (begin
+                    (bitset-set! mem x #f)
+                    (clear (fx+ x t)))))
+              (sieve (fx+ i 1) (fx+ t 2) (fx+ s ds) (fx+ ds 4) (cons t l)))
+            (sieve (fx+ i 1) (fx+ t 2) (fx+ s ds) (fx+ ds 4) l))
+         (let collect ((i i) (t t) (l l))
+           (if (fx< i lim)
+             (collect (fx+ i 1)
+                      (fx+ t 2)
+                      (if (bitset-ref mem i) (cons t l) l))
+             (reverse l))))))))
 
 (define-inline (_pi n)
   (if (fx< _prime-pi-limit n)
@@ -163,52 +164,60 @@
                     (subloop (fx+ j 1) (fx+ (fx- s (_pi (fx/ t (##sys#slot _prime-pi-primes j)))) (fx- j 1)))))))))))))
 
 (define-inline (_discrete-log b n m)
-  (let ((l (inexact->exact (ceiling (sqrt m)))) (h (make-hash-table)))
-    (do ((i 0 (+ i 1)) (t 1 (modulo (* t b) m))) ((= i l))
-      (hash-table-set! h t i))
-    (let ((v (_modular-expt (_modular-inverse b m) l m)))
-      (let loop ((i 0) (t n))
-        (if (= i l) -1
-          (if (hash-table-exists? h t)
-            (let ((r (+ (hash-table-ref h t) (* i l))))
-              (if (and (positive? r) (= (modular-expt b r m) n)) r -1))
-            (loop (+ i 1) (modulo (* t v) m))))))))
+  (let ((b (modulo b m))
+        (n (modulo n m)))
+    (cond
+      ((= n 1) 0)
+      ((= m 1) 0)
+      ((= b 0) (if (= n 0) 1 -1))
+      ((not (= 1 (gcd b m))) -1)
+      ((= n 0) -1)
+      (else
+        (let* ((l (let ((r (_fxsqrt m))) (if (< (* r r) m) (+ r 1) r)))
+               (v (_modular-expt (_modular-inverse b m) l m))
+               (h (make-hash-table)))
+          (do ((i 0 (+ i 1)) (t 1 (modulo (* t b) m))) ((= i l))
+            (hash-table-update!/default h t identity i))
+          (let loop ((i 0) (t n))
+            (cond
+              ((= i l) -1)
+              ((hash-table-ref/default h t #f)
+               => (lambda (t) (+ t (* i l))))
+              (else (loop (+ i 1) (modulo (* t v) m))))))))))
 
-(define-inline (_trial-division-prime? n)
-  (unless _trial-division-prime?-primes
-    (set! _trial-division-prime?-primes (_primes (_fxsqrt _trial-division-prime?-limit))))
-  (let loop ((l _trial-division-prime?-primes))
-    (if (null? l)
-      #t
-      (let ((_ (##sys#slot l 0)))
-        (cond
-          ((fx> (fx*   _ _) n) #t)
-          ((fx= (fxmod n _) 0) #f)
-          (else (loop (##sys#slot l 1))))))))
+(define-inline (_miller-rabin-bases n)
+  (cond
+    ((< n 25326001)        '(2 3 5))
+    ((< n 3215031751)      '(2 3 5 7))
+    ((< n 4759123141)      '(2 7 61))
+    ((< n 341550071728321) '(2 3 5 7 11 13 17))
+    (else                  '(2 325 9375 28178 450775 9780504 1795265022))))
 
-(define-inline (_witness? n a)
-  (do ((d (- n 1) (quotient d 2))
-       (s 0 (+ s 1)))
-      ((odd? d)
-       (let ((t (_modular-expt a d n)))
-         (if (or (= t 1)
-                 (= t (- n 1)))
-           #t
-           (do ((s s (- s 1))
-                (t t (_modular-expt t 2 n)))
-             ((or (zero? s)
-                  (= t (- n 1)))
-              (positive? s))))))))
+(define-inline (_miller-rabin-prime? n bases)
+  (let ((n-1 (- n 1)))
+    (let loop ((d n-1) (s 0))
+      (if (even? d)
+        (loop (arithmetic-shift d -1) (+ s 1))
+        (let subloop ((bases bases))
+          (if (null? bases) #t
+            (let ((x (_modular-expt (##sys#slot bases 0) d n)))
+              (if (or (= x 1)
+                      (= x n-1))
+                (subloop (##sys#slot bases 1))
+                (let sq ((k (- s 1)) (x x))
+                  (if (zero? k) #f
+                    (let ((x^2 (modulo (* x x) n)))
+                      (cond ((= x^2 1) #f)
+                            ((= x^2 n-1) (subloop (##sys#slot bases 1)))
+                            (else (sq (- k 1) x^2))))))))))))))
 
 (define-inline (_prime? n)
-  (if (< n 2)
-    #f
-    (if (< n _trial-division-prime?-limit)
-      (_trial-division-prime? n)
-      ((list-of?
-         (lambda (i)
-           (_witness? n i)))
-       '(2 325 9375 28178 450775 9780504 1795265022)))))
+  (cond
+    ((< n 2)   #f)
+    ((= n 2)   #t)
+    ((even? n) #f)
+    ((< n 6)   #t)
+    (else (_miller-rabin-prime? n (_miller-rabin-bases n)))))
 
 (define-inline (_factor n)
   (cond

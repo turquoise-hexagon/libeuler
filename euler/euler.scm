@@ -73,6 +73,7 @@
   (import
     (scheme)
     (chicken base)
+    (chicken bitwise)
     (chicken bytevector)
     (chicken fixnum)
     (chicken foreign)
