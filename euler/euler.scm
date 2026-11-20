@@ -85,7 +85,9 @@
     (only (srfi 69)
       hash-table-exists?
       hash-table-ref
+      hash-table-ref/default
       hash-table-set!
+      hash-table-update!/default
       make-hash-table))
 
   (include-relative "src/utils/utils.scm")
